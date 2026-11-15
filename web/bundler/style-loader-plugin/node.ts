@@ -113,6 +113,8 @@ export function styleLoaderPlugin({
                     contents: await readFile(args.path, "utf8"),
                     loader: "css" as const,
                     resolveDir: dirname(args.path),
+                    // Watch mode only watches files in the `file` namespace on its own.
+                    watchFiles: [args.path],
                 };
             });
 
