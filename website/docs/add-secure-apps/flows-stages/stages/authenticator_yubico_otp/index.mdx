@@ -1,0 +1,33 @@
+---
+title: Yubico OTP authenticator setup stage
+description: Register YubiKeys that type Yubico one-time passwords.
+---
+
+The Yubico OTP Authenticator Setup stage registers a YubiKey slot that generates [Yubico OTPs](https://developers.yubico.com/OTP/OTPs_Explained.html). When the user touches the key, it types a 44-character one-time password like a keyboard, so it works without browser or client support for security keys.
+
+## About the Yubico OTP authenticator setup stage
+
+The user touches their YubiKey once. authentik checks the one-time password with a validation server and registers the key by its public ID, the first 12 characters of every password the key types.
+
+The registered key can then be used with the [Authenticator Validation stage](../authenticator_validate/index.mdx), including through the [LDAP](../../../providers/ldap/index.mdx) and [RADIUS](../../../providers/radius/index.mdx) providers with code-based MFA, where the user appends the one-time password to their password after a `;`.
+
+To use a YubiKey with WebAuthn or as a passkey instead, use the [WebAuthn authenticator setup stage](../authenticator_webauthn/index.mdx).
+
+## Configuration options
+
+- **Validation server URL**: the verify endpoint of a server that implements the [Yubico OTP validation protocol 2.0](https://developers.yubico.com/OTP/Specifications/OTP_validation_protocol.html). Defaults to YubiCloud, `https://api.yubico.com/wsapi/2.0/verify`.
+- **Client ID** and **Secret key**: credentials for the validation server. For YubiCloud, get them from https://upgrade.yubico.com/getapikey/. The secret key is used to sign requests and to check that responses come from the server.
+- **Authenticator type name**: optional friendly name shown to the user in self-service settings.
+- **Configuration flow**: optional authenticated flow that lets users enroll this authenticator from user settings.
+
+## Flow integration
+
+Use this stage in an enrollment or user-settings flow where the user can add a YubiKey.
+
+To require the key during login, add an [Authenticator Validation stage](../authenticator_validate/index.mdx) to the authentication flow and allow the **Yubico OTP** device class.
+
+## Notes
+
+- YubiKeys are programmed for YubiCloud in slot 1 at the factory, so most keys work without any setup.
+- Every login is checked with the validation server, which also rejects one-time passwords that were already used. If the server can't be reached, logins with this authenticator fail.
+- Keys only type the expected characters with keyboard layouts that the key supports, such as US QWERTY. If one-time passwords are rejected as invalid, check the keyboard layout of the device.
