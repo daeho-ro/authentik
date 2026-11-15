@@ -1643,6 +1643,163 @@ paths:
           $ref: '#/components/responses/ValidationErrorResponse'
         '403':
           $ref: '#/components/responses/GenericErrorResponse'
+  /authenticators/admin/yubico_otp/:
+    get:
+      operationId: authenticators_admin_yubico_otp_list
+      description: Viewset for Yubico OTP authenticator devices (for admins)
+      parameters:
+      - $ref: '#/components/parameters/QueryName'
+      - $ref: '#/components/parameters/QueryPaginationOrdering'
+      - $ref: '#/components/parameters/QueryPaginationPage'
+      - $ref: '#/components/parameters/QueryPaginationPageSize'
+      - $ref: '#/components/parameters/QuerySearch'
+      tags:
+      - authenticators
+      security:
+      - authentik: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedYubicoOTPDeviceList'
+          description: ''
+        '400':
+          $ref: '#/components/responses/ValidationErrorResponse'
+        '403':
+          $ref: '#/components/responses/GenericErrorResponse'
+    post:
+      operationId: authenticators_admin_yubico_otp_create
+      description: Viewset for Yubico OTP authenticator devices (for admins)
+      tags:
+      - authenticators
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/YubicoOTPDeviceRequest'
+        required: true
+      security:
+      - authentik: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/YubicoOTPDevice'
+          description: ''
+        '400':
+          $ref: '#/components/responses/ValidationErrorResponse'
+        '403':
+          $ref: '#/components/responses/GenericErrorResponse'
+  /authenticators/admin/yubico_otp/{id}/:
+    get:
+      operationId: authenticators_admin_yubico_otp_retrieve
+      description: Viewset for Yubico OTP authenticator devices (for admins)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Yubico OTP Device.
+        required: true
+      tags:
+      - authenticators
+      security:
+      - authentik: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/YubicoOTPDevice'
+          description: ''
+        '400':
+          $ref: '#/components/responses/ValidationErrorResponse'
+        '403':
+          $ref: '#/components/responses/GenericErrorResponse'
+    put:
+      operationId: authenticators_admin_yubico_otp_update
+      description: Viewset for Yubico OTP authenticator devices (for admins)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Yubico OTP Device.
+        required: true
+      tags:
+      - authenticators
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/YubicoOTPDeviceRequest'
+        required: true
+      security:
+      - authentik: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/YubicoOTPDevice'
+          description: ''
+        '400':
+          $ref: '#/components/responses/ValidationErrorResponse'
+        '403':
+          $ref: '#/components/responses/GenericErrorResponse'
+    patch:
+      operationId: authenticators_admin_yubico_otp_partial_update
+      description: Viewset for Yubico OTP authenticator devices (for admins)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Yubico OTP Device.
+        required: true
+      tags:
+      - authenticators
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedYubicoOTPDeviceRequest'
+      security:
+      - authentik: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/YubicoOTPDevice'
+          description: ''
+        '400':
+          $ref: '#/components/responses/ValidationErrorResponse'
+        '403':
+          $ref: '#/components/responses/GenericErrorResponse'
+    delete:
+      operationId: authenticators_admin_yubico_otp_destroy
+      description: Viewset for Yubico OTP authenticator devices (for admins)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Yubico OTP Device.
+        required: true
+      tags:
+      - authenticators
+      security:
+      - authentik: []
+      responses:
+        '204':
+          description: No response body
+        '400':
+          $ref: '#/components/responses/ValidationErrorResponse'
+        '403':
+          $ref: '#/components/responses/GenericErrorResponse'
   /authenticators/all/:
     get:
       operationId: authenticators_all_list
@@ -2737,6 +2894,167 @@ paths:
         schema:
           type: integer
         description: A unique integer value identifying this WebAuthn Device.
+        required: true
+      tags:
+      - authenticators
+      security:
+      - authentik: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UsedBy'
+          description: ''
+        '400':
+          $ref: '#/components/responses/ValidationErrorResponse'
+        '403':
+          $ref: '#/components/responses/GenericErrorResponse'
+  /authenticators/yubico_otp/:
+    get:
+      operationId: authenticators_yubico_otp_list
+      description: Viewset for Yubico OTP authenticator devices
+      parameters:
+      - $ref: '#/components/parameters/QueryName'
+      - $ref: '#/components/parameters/QueryPaginationOrdering'
+      - $ref: '#/components/parameters/QueryPaginationPage'
+      - $ref: '#/components/parameters/QueryPaginationPageSize'
+      - $ref: '#/components/parameters/QuerySearch'
+      tags:
+      - authenticators
+      security:
+      - authentik: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedYubicoOTPDeviceList'
+          description: ''
+        '400':
+          $ref: '#/components/responses/ValidationErrorResponse'
+        '403':
+          $ref: '#/components/responses/GenericErrorResponse'
+  /authenticators/yubico_otp/{id}/:
+    get:
+      operationId: authenticators_yubico_otp_retrieve
+      description: Viewset for Yubico OTP authenticator devices
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Yubico OTP Device.
+        required: true
+      tags:
+      - authenticators
+      security:
+      - authentik: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/YubicoOTPDevice'
+          description: ''
+        '400':
+          $ref: '#/components/responses/ValidationErrorResponse'
+        '403':
+          $ref: '#/components/responses/GenericErrorResponse'
+    put:
+      operationId: authenticators_yubico_otp_update
+      description: Viewset for Yubico OTP authenticator devices
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Yubico OTP Device.
+        required: true
+      tags:
+      - authenticators
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/YubicoOTPDeviceRequest'
+        required: true
+      security:
+      - authentik: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/YubicoOTPDevice'
+          description: ''
+        '400':
+          $ref: '#/components/responses/ValidationErrorResponse'
+        '403':
+          $ref: '#/components/responses/GenericErrorResponse'
+    patch:
+      operationId: authenticators_yubico_otp_partial_update
+      description: Viewset for Yubico OTP authenticator devices
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Yubico OTP Device.
+        required: true
+      tags:
+      - authenticators
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedYubicoOTPDeviceRequest'
+      security:
+      - authentik: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/YubicoOTPDevice'
+          description: ''
+        '400':
+          $ref: '#/components/responses/ValidationErrorResponse'
+        '403':
+          $ref: '#/components/responses/GenericErrorResponse'
+    delete:
+      operationId: authenticators_yubico_otp_destroy
+      description: Viewset for Yubico OTP authenticator devices
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Yubico OTP Device.
+        required: true
+      tags:
+      - authenticators
+      security:
+      - authentik: []
+      responses:
+        '204':
+          description: No response body
+        '400':
+          $ref: '#/components/responses/ValidationErrorResponse'
+        '403':
+          $ref: '#/components/responses/GenericErrorResponse'
+  /authenticators/yubico_otp/{id}/used_by/:
+    get:
+      operationId: authenticators_yubico_otp_used_by_list
+      description: Get a list of all objects that use this object
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this Yubico OTP Device.
         required: true
       tags:
       - authenticators
@@ -31547,6 +31865,227 @@ paths:
           $ref: '#/components/responses/ValidationErrorResponse'
         '403':
           $ref: '#/components/responses/GenericErrorResponse'
+  /stages/authenticator/yubico_otp/:
+    get:
+      operationId: stages_authenticator_yubico_otp_list
+      description: AuthenticatorYubicoOTPStage Viewset
+      parameters:
+      - in: query
+        name: api_url
+        schema:
+          type: string
+      - in: query
+        name: client_id
+        schema:
+          type: string
+      - in: query
+        name: configure_flow
+        schema:
+          type: string
+          format: uuid
+      - in: query
+        name: friendly_name
+        schema:
+          type: string
+      - $ref: '#/components/parameters/QueryName'
+      - $ref: '#/components/parameters/QueryPaginationOrdering'
+      - $ref: '#/components/parameters/QueryPaginationPage'
+      - $ref: '#/components/parameters/QueryPaginationPageSize'
+      - $ref: '#/components/parameters/QuerySearch'
+      - in: query
+        name: secret_key
+        schema:
+          type: string
+      - in: query
+        name: stage_uuid
+        schema:
+          type: string
+          format: uuid
+      tags:
+      - stages
+      security:
+      - authentik: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAuthenticatorYubicoOTPStageList'
+          description: ''
+        '400':
+          $ref: '#/components/responses/ValidationErrorResponse'
+        '403':
+          $ref: '#/components/responses/GenericErrorResponse'
+    post:
+      operationId: stages_authenticator_yubico_otp_create
+      description: AuthenticatorYubicoOTPStage Viewset
+      tags:
+      - stages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthenticatorYubicoOTPStageRequest'
+        required: true
+      security:
+      - authentik: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticatorYubicoOTPStage'
+          description: ''
+        '400':
+          $ref: '#/components/responses/ValidationErrorResponse'
+        '403':
+          $ref: '#/components/responses/GenericErrorResponse'
+  /stages/authenticator/yubico_otp/{stage_uuid}/:
+    get:
+      operationId: stages_authenticator_yubico_otp_retrieve
+      description: AuthenticatorYubicoOTPStage Viewset
+      parameters:
+      - in: path
+        name: stage_uuid
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Yubico OTP Authenticator Setup
+          Stage.
+        required: true
+      tags:
+      - stages
+      security:
+      - authentik: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticatorYubicoOTPStage'
+          description: ''
+        '400':
+          $ref: '#/components/responses/ValidationErrorResponse'
+        '403':
+          $ref: '#/components/responses/GenericErrorResponse'
+    put:
+      operationId: stages_authenticator_yubico_otp_update
+      description: AuthenticatorYubicoOTPStage Viewset
+      parameters:
+      - in: path
+        name: stage_uuid
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Yubico OTP Authenticator Setup
+          Stage.
+        required: true
+      tags:
+      - stages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthenticatorYubicoOTPStageRequest'
+        required: true
+      security:
+      - authentik: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticatorYubicoOTPStage'
+          description: ''
+        '400':
+          $ref: '#/components/responses/ValidationErrorResponse'
+        '403':
+          $ref: '#/components/responses/GenericErrorResponse'
+    patch:
+      operationId: stages_authenticator_yubico_otp_partial_update
+      description: AuthenticatorYubicoOTPStage Viewset
+      parameters:
+      - in: path
+        name: stage_uuid
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Yubico OTP Authenticator Setup
+          Stage.
+        required: true
+      tags:
+      - stages
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAuthenticatorYubicoOTPStageRequest'
+      security:
+      - authentik: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticatorYubicoOTPStage'
+          description: ''
+        '400':
+          $ref: '#/components/responses/ValidationErrorResponse'
+        '403':
+          $ref: '#/components/responses/GenericErrorResponse'
+    delete:
+      operationId: stages_authenticator_yubico_otp_destroy
+      description: AuthenticatorYubicoOTPStage Viewset
+      parameters:
+      - in: path
+        name: stage_uuid
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Yubico OTP Authenticator Setup
+          Stage.
+        required: true
+      tags:
+      - stages
+      security:
+      - authentik: []
+      responses:
+        '204':
+          description: No response body
+        '400':
+          $ref: '#/components/responses/ValidationErrorResponse'
+        '403':
+          $ref: '#/components/responses/GenericErrorResponse'
+  /stages/authenticator/yubico_otp/{stage_uuid}/used_by/:
+    get:
+      operationId: stages_authenticator_yubico_otp_used_by_list
+      description: Get a list of all objects that use this object
+      parameters:
+      - in: path
+        name: stage_uuid
+        schema:
+          type: string
+          format: uuid
+        description: A UUID string identifying this Yubico OTP Authenticator Setup
+          Stage.
+        required: true
+      tags:
+      - stages
+      security:
+      - authentik: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UsedBy'
+          description: ''
+        '400':
+          $ref: '#/components/responses/ValidationErrorResponse'
+        '403':
+          $ref: '#/components/responses/GenericErrorResponse'
   /stages/captcha/:
     get:
       operationId: stages_captcha_list
@@ -36563,6 +37102,7 @@ components:
       - authentik.stages.authenticator_totp
       - authentik.stages.authenticator_validate
       - authentik.stages.authenticator_webauthn
+      - authentik.stages.authenticator_yubico_otp
       - authentik.stages.captcha
       - authentik.stages.consent
       - authentik.stages.deny
@@ -38160,6 +38700,127 @@ components:
           minimum: 0
       required:
       - name
+    AuthenticatorYubicoOTPChallenge:
+      type: object
+      description: Yubico OTP Setup challenge
+      properties:
+        flow_info:
+          $ref: '#/components/schemas/ContextualFlowInfo'
+        component:
+          type: string
+          default: ak-stage-authenticator-yubico-otp
+        response_errors:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/ErrorDetail'
+        pending_user:
+          type: string
+        pending_user_avatar:
+          type: string
+      required:
+      - pending_user
+      - pending_user_avatar
+    AuthenticatorYubicoOTPChallengeResponseRequest:
+      type: object
+      description: Yubico OTP setup response, with an OTP from the key being registered
+      properties:
+        component:
+          type: string
+          minLength: 1
+          default: ak-stage-authenticator-yubico-otp
+        code:
+          type: string
+          minLength: 1
+      required:
+      - code
+    AuthenticatorYubicoOTPStage:
+      type: object
+      description: AuthenticatorYubicoOTPStage Serializer
+      properties:
+        pk:
+          type: string
+          format: uuid
+          readOnly: true
+          title: Stage uuid
+        name:
+          type: string
+        component:
+          type: string
+          description: Get object type so that we know how to edit the object
+          readOnly: true
+        verbose_name:
+          type: string
+          description: Return object's verbose_name
+          readOnly: true
+        verbose_name_plural:
+          type: string
+          description: Return object's plural verbose_name
+          readOnly: true
+        meta_model_name:
+          type: string
+          description: Return internal model name
+          readOnly: true
+        flow_set:
+          type: array
+          items:
+            $ref: '#/components/schemas/FlowSet'
+          readOnly: true
+        configure_flow:
+          type: string
+          format: uuid
+          nullable: true
+          description: Flow used by an authenticated user to configure this Stage.
+            If empty, user will not be able to configure this stage.
+        friendly_name:
+          type: string
+        api_url:
+          type: string
+          description: Validation server that verifies OTPs, YubiCloud by default.
+        client_id:
+          type: string
+          description: Client ID for the validation server.
+      required:
+      - client_id
+      - component
+      - flow_set
+      - meta_model_name
+      - name
+      - pk
+      - verbose_name
+      - verbose_name_plural
+    AuthenticatorYubicoOTPStageRequest:
+      type: object
+      description: AuthenticatorYubicoOTPStage Serializer
+      properties:
+        name:
+          type: string
+          minLength: 1
+        configure_flow:
+          type: string
+          format: uuid
+          nullable: true
+          description: Flow used by an authenticated user to configure this Stage.
+            If empty, user will not be able to configure this stage.
+        friendly_name:
+          type: string
+        api_url:
+          type: string
+          minLength: 1
+          description: Validation server that verifies OTPs, YubiCloud by default.
+        client_id:
+          type: string
+          minLength: 1
+          description: Client ID for the validation server.
+        secret_key:
+          type: string
+          writeOnly: true
+          minLength: 1
+          description: Secret key for the validation server.
+      required:
+      - client_id
+      - name
     AuthorizationCodeAuthMethodEnum:
       enum:
       - basic_auth
@@ -38845,6 +39506,7 @@ components:
       - $ref: '#/components/schemas/AuthenticatorTOTPChallenge'
       - $ref: '#/components/schemas/AuthenticatorValidationChallenge'
       - $ref: '#/components/schemas/AuthenticatorWebAuthnChallenge'
+      - $ref: '#/components/schemas/AuthenticatorYubicoOTPChallenge'
       - $ref: '#/components/schemas/AutosubmitChallenge'
       - $ref: '#/components/schemas/CaptchaChallenge'
       - $ref: '#/components/schemas/ConsentChallenge'
@@ -38878,6 +39540,7 @@ components:
           ak-stage-authenticator-totp: '#/components/schemas/AuthenticatorTOTPChallenge'
           ak-stage-authenticator-validate: '#/components/schemas/AuthenticatorValidationChallenge'
           ak-stage-authenticator-webauthn: '#/components/schemas/AuthenticatorWebAuthnChallenge'
+          ak-stage-authenticator-yubico-otp: '#/components/schemas/AuthenticatorYubicoOTPChallenge'
           ak-stage-autosubmit: '#/components/schemas/AutosubmitChallenge'
           ak-stage-captcha: '#/components/schemas/CaptchaChallenge'
           ak-stage-consent: '#/components/schemas/ConsentChallenge'
@@ -39838,6 +40501,7 @@ components:
       - duo
       - sms
       - email
+      - yubicootp
       type: string
     DeviceConnection:
       type: object
@@ -41843,6 +42507,7 @@ components:
       - $ref: '#/components/schemas/AuthenticatorTOTPChallengeResponseRequest'
       - $ref: '#/components/schemas/AuthenticatorValidationChallengeResponseRequest'
       - $ref: '#/components/schemas/AuthenticatorWebAuthnChallengeResponseRequest'
+      - $ref: '#/components/schemas/AuthenticatorYubicoOTPChallengeResponseRequest'
       - $ref: '#/components/schemas/AutoSubmitChallengeResponseRequest'
       - $ref: '#/components/schemas/CaptchaChallengeResponseRequest'
       - $ref: '#/components/schemas/ConsentChallengeResponseRequest'
@@ -41872,6 +42537,7 @@ components:
           ak-stage-authenticator-totp: '#/components/schemas/AuthenticatorTOTPChallengeResponseRequest'
           ak-stage-authenticator-validate: '#/components/schemas/AuthenticatorValidationChallengeResponseRequest'
           ak-stage-authenticator-webauthn: '#/components/schemas/AuthenticatorWebAuthnChallengeResponseRequest'
+          ak-stage-authenticator-yubico-otp: '#/components/schemas/AuthenticatorYubicoOTPChallengeResponseRequest'
           ak-stage-autosubmit: '#/components/schemas/AutoSubmitChallengeResponseRequest'
           ak-stage-captcha: '#/components/schemas/CaptchaChallengeResponseRequest'
           ak-stage-consent: '#/components/schemas/ConsentChallengeResponseRequest'
@@ -46146,6 +46812,8 @@ components:
       - authentik_stages_authenticator_validate.authenticatorvalidatestage
       - authentik_stages_authenticator_webauthn.authenticatorwebauthnstage
       - authentik_stages_authenticator_webauthn.webauthndevice
+      - authentik_stages_authenticator_yubico_otp.authenticatoryubicootpstage
+      - authentik_stages_authenticator_yubico_otp.yubicootpdevice
       - authentik_stages_captcha.captchastage
       - authentik_stages_consent.consentstage
       - authentik_stages_deny.denystage
@@ -48051,6 +48719,21 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AuthenticatorWebAuthnStage'
+        autocomplete:
+          $ref: '#/components/schemas/Autocomplete'
+      required:
+      - autocomplete
+      - pagination
+      - results
+    PaginatedAuthenticatorYubicoOTPStageList:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuthenticatorYubicoOTPStage'
         autocomplete:
           $ref: '#/components/schemas/Autocomplete'
       required:
@@ -50322,6 +51005,21 @@ components:
       - autocomplete
       - pagination
       - results
+    PaginatedYubicoOTPDeviceList:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/YubicoOTPDevice'
+        autocomplete:
+          $ref: '#/components/schemas/Autocomplete'
+      required:
+      - autocomplete
+      - pagination
+      - results
     Pagination:
       type: object
       properties:
@@ -51268,6 +51966,34 @@ components:
           type: integer
           maximum: 2147483647
           minimum: 0
+    PatchedAuthenticatorYubicoOTPStageRequest:
+      type: object
+      description: AuthenticatorYubicoOTPStage Serializer
+      properties:
+        name:
+          type: string
+          minLength: 1
+        configure_flow:
+          type: string
+          format: uuid
+          nullable: true
+          description: Flow used by an authenticated user to configure this Stage.
+            If empty, user will not be able to configure this stage.
+        friendly_name:
+          type: string
+        api_url:
+          type: string
+          minLength: 1
+          description: Validation server that verifies OTPs, YubiCloud by default.
+        client_id:
+          type: string
+          minLength: 1
+          description: Client ID for the validation server.
+        secret_key:
+          type: string
+          writeOnly: true
+          minLength: 1
+          description: Secret key for the validation server.
     PatchedBlueprintInstanceRequest:
       type: object
       description: Info about a single blueprint instance file
@@ -55066,6 +55792,15 @@ components:
           type: string
           minLength: 1
           maxLength: 200
+    PatchedYubicoOTPDeviceRequest:
+      type: object
+      description: Serializer for Yubico OTP authenticator devices
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: The human-readable name of this device.
+          maxLength: 64
     Permission:
       type: object
       description: Global permission
@@ -63079,6 +63814,41 @@ components:
       - version
       - version_matching
       - worker_id
+    YubicoOTPDevice:
+      type: object
+      description: Serializer for Yubico OTP authenticator devices
+      properties:
+        name:
+          type: string
+          description: The human-readable name of this device.
+          maxLength: 64
+        pk:
+          type: integer
+          readOnly: true
+          title: ID
+        public_id:
+          type: string
+          readOnly: true
+        user:
+          allOf:
+          - $ref: '#/components/schemas/PartialUser'
+          readOnly: true
+      required:
+      - name
+      - pk
+      - public_id
+      - user
+    YubicoOTPDeviceRequest:
+      type: object
+      description: Serializer for Yubico OTP authenticator devices
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: The human-readable name of this device.
+          maxLength: 64
+      required:
+      - name
     modelRequest:
       oneOf:
       - $ref: '#/components/schemas/GoogleWorkspaceProviderRequest'

@@ -26,6 +26,7 @@ type FlowChallengeResponseRequest struct {
 	AuthenticatorTOTPChallengeResponseRequest       *AuthenticatorTOTPChallengeResponseRequest
 	AuthenticatorValidationChallengeResponseRequest *AuthenticatorValidationChallengeResponseRequest
 	AuthenticatorWebAuthnChallengeResponseRequest   *AuthenticatorWebAuthnChallengeResponseRequest
+	AuthenticatorYubicoOTPChallengeResponseRequest  *AuthenticatorYubicoOTPChallengeResponseRequest
 	AutoSubmitChallengeResponseRequest              *AutoSubmitChallengeResponseRequest
 	CaptchaChallengeResponseRequest                 *CaptchaChallengeResponseRequest
 	ConsentChallengeResponseRequest                 *ConsentChallengeResponseRequest
@@ -99,6 +100,13 @@ func AuthenticatorValidationChallengeResponseRequestAsFlowChallengeResponseReque
 func AuthenticatorWebAuthnChallengeResponseRequestAsFlowChallengeResponseRequest(v *AuthenticatorWebAuthnChallengeResponseRequest) FlowChallengeResponseRequest {
 	return FlowChallengeResponseRequest{
 		AuthenticatorWebAuthnChallengeResponseRequest: v,
+	}
+}
+
+// AuthenticatorYubicoOTPChallengeResponseRequestAsFlowChallengeResponseRequest is a convenience function that returns AuthenticatorYubicoOTPChallengeResponseRequest wrapped in FlowChallengeResponseRequest
+func AuthenticatorYubicoOTPChallengeResponseRequestAsFlowChallengeResponseRequest(v *AuthenticatorYubicoOTPChallengeResponseRequest) FlowChallengeResponseRequest {
+	return FlowChallengeResponseRequest{
+		AuthenticatorYubicoOTPChallengeResponseRequest: v,
 	}
 }
 
@@ -406,6 +414,18 @@ func (dst *FlowChallengeResponseRequest) UnmarshalJSON(data []byte) error {
 		}
 	}
 
+	// check if the discriminator value is 'ak-stage-authenticator-yubico-otp'
+	if jsonDict["component"] == "ak-stage-authenticator-yubico-otp" {
+		// try to unmarshal JSON data into AuthenticatorYubicoOTPChallengeResponseRequest
+		err = json.Unmarshal(data, &dst.AuthenticatorYubicoOTPChallengeResponseRequest)
+		if err == nil {
+			return nil // data stored in dst.AuthenticatorYubicoOTPChallengeResponseRequest, return on the first match
+		} else {
+			dst.AuthenticatorYubicoOTPChallengeResponseRequest = nil
+			return fmt.Errorf("failed to unmarshal FlowChallengeResponseRequest as AuthenticatorYubicoOTPChallengeResponseRequest: %s", err.Error())
+		}
+	}
+
 	// check if the discriminator value is 'ak-stage-autosubmit'
 	if jsonDict["component"] == "ak-stage-autosubmit" {
 		// try to unmarshal JSON data into AutoSubmitChallengeResponseRequest
@@ -587,6 +607,10 @@ func (src FlowChallengeResponseRequest) MarshalJSON() ([]byte, error) {
 		return json.Marshal(&src.AuthenticatorWebAuthnChallengeResponseRequest)
 	}
 
+	if src.AuthenticatorYubicoOTPChallengeResponseRequest != nil {
+		return json.Marshal(&src.AuthenticatorYubicoOTPChallengeResponseRequest)
+	}
+
 	if src.AutoSubmitChallengeResponseRequest != nil {
 		return json.Marshal(&src.AutoSubmitChallengeResponseRequest)
 	}
@@ -699,6 +723,10 @@ func (obj *FlowChallengeResponseRequest) GetActualInstance() interface{} {
 		return obj.AuthenticatorWebAuthnChallengeResponseRequest
 	}
 
+	if obj.AuthenticatorYubicoOTPChallengeResponseRequest != nil {
+		return obj.AuthenticatorYubicoOTPChallengeResponseRequest
+	}
+
 	if obj.AutoSubmitChallengeResponseRequest != nil {
 		return obj.AutoSubmitChallengeResponseRequest
 	}
@@ -807,6 +835,10 @@ func (obj FlowChallengeResponseRequest) GetActualInstanceValue() interface{} {
 
 	if obj.AuthenticatorWebAuthnChallengeResponseRequest != nil {
 		return *obj.AuthenticatorWebAuthnChallengeResponseRequest
+	}
+
+	if obj.AuthenticatorYubicoOTPChallengeResponseRequest != nil {
+		return *obj.AuthenticatorYubicoOTPChallengeResponseRequest
 	}
 
 	if obj.AutoSubmitChallengeResponseRequest != nil {

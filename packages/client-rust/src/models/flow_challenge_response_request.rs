@@ -29,6 +29,8 @@ pub enum FlowChallengeResponseRequest {
     AkStageAuthenticatorValidate(models::AuthenticatorValidationChallengeResponseRequest),
     #[serde(rename = "ak-stage-authenticator-webauthn")]
     AkStageAuthenticatorWebauthn(models::AuthenticatorWebAuthnChallengeResponseRequest),
+    #[serde(rename = "ak-stage-authenticator-yubico-otp")]
+    AkStageAuthenticatorYubicoOtp(models::AuthenticatorYubicoOtpChallengeResponseRequest),
     #[serde(rename = "ak-stage-autosubmit")]
     AkStageAutosubmit(models::AutoSubmitChallengeResponseRequest),
     #[serde(rename = "ak-stage-captcha")]

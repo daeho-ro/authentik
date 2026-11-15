@@ -31,6 +31,8 @@ pub enum ChallengeTypes {
     AkStageAuthenticatorValidate(models::AuthenticatorValidationChallenge),
     #[serde(rename = "ak-stage-authenticator-webauthn")]
     AkStageAuthenticatorWebauthn(models::AuthenticatorWebAuthnChallenge),
+    #[serde(rename = "ak-stage-authenticator-yubico-otp")]
+    AkStageAuthenticatorYubicoOtp(models::AuthenticatorYubicoOtpChallenge),
     #[serde(rename = "ak-stage-autosubmit")]
     AkStageAutosubmit(models::AutosubmitChallenge),
     #[serde(rename = "ak-stage-captcha")]

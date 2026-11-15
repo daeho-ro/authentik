@@ -91,6 +91,14 @@ import {
     type AuthenticatorWebAuthnStageRequest,
     AuthenticatorWebAuthnStageRequestToJSON,
 } from "../models/AuthenticatorWebAuthnStageRequest.js";
+import {
+    type AuthenticatorYubicoOTPStage,
+    AuthenticatorYubicoOTPStageFromJSON,
+} from "../models/AuthenticatorYubicoOTPStage.js";
+import {
+    type AuthenticatorYubicoOTPStageRequest,
+    AuthenticatorYubicoOTPStageRequestToJSON,
+} from "../models/AuthenticatorYubicoOTPStageRequest.js";
 import { type AuthTypeEnum } from "../models/AuthTypeEnum.js";
 import { type CaptchaStage, CaptchaStageFromJSON } from "../models/CaptchaStage.js";
 import {
@@ -183,6 +191,10 @@ import {
     type PaginatedAuthenticatorWebAuthnStageList,
     PaginatedAuthenticatorWebAuthnStageListFromJSON,
 } from "../models/PaginatedAuthenticatorWebAuthnStageList.js";
+import {
+    type PaginatedAuthenticatorYubicoOTPStageList,
+    PaginatedAuthenticatorYubicoOTPStageListFromJSON,
+} from "../models/PaginatedAuthenticatorYubicoOTPStageList.js";
 import {
     type PaginatedCaptchaStageList,
     PaginatedCaptchaStageListFromJSON,
@@ -308,6 +320,10 @@ import {
     type PatchedAuthenticatorWebAuthnStageRequest,
     PatchedAuthenticatorWebAuthnStageRequestToJSON,
 } from "../models/PatchedAuthenticatorWebAuthnStageRequest.js";
+import {
+    type PatchedAuthenticatorYubicoOTPStageRequest,
+    PatchedAuthenticatorYubicoOTPStageRequestToJSON,
+} from "../models/PatchedAuthenticatorYubicoOTPStageRequest.js";
 import {
     type PatchedCaptchaStageRequest,
     PatchedCaptchaStageRequestToJSON,
@@ -1123,6 +1139,73 @@ export interface StagesAuthenticatorWebauthnUpdateRequest {
 export interface StagesAuthenticatorWebauthnUsedByListRequest {
     /**
      * A UUID string identifying this WebAuthn Authenticator Setup Stage.
+     */
+    stageUuid: string;
+}
+
+export interface StagesAuthenticatorYubicoOtpCreateRequest {
+    authenticatorYubicoOTPStageRequest: AuthenticatorYubicoOTPStageRequest;
+}
+
+export interface StagesAuthenticatorYubicoOtpDestroyRequest {
+    /**
+     * A UUID string identifying this Yubico OTP Authenticator Setup Stage.
+     */
+    stageUuid: string;
+}
+
+export interface StagesAuthenticatorYubicoOtpListRequest {
+    apiUrl?: string;
+    clientId?: string;
+    configureFlow?: string;
+    friendlyName?: string;
+    name?: string;
+    /**
+     * Which field to use when ordering the results.
+     */
+    ordering?: string;
+    /**
+     * A page number within the paginated result set.
+     */
+    page?: number;
+    /**
+     * Number of results to return per page.
+     */
+    pageSize?: number;
+    /**
+     * A search term.
+     */
+    search?: string;
+    secretKey?: string;
+    stageUuid?: string;
+}
+
+export interface StagesAuthenticatorYubicoOtpPartialUpdateRequest {
+    /**
+     * A UUID string identifying this Yubico OTP Authenticator Setup Stage.
+     */
+    stageUuid: string;
+    patchedAuthenticatorYubicoOTPStageRequest?: PatchedAuthenticatorYubicoOTPStageRequest;
+}
+
+export interface StagesAuthenticatorYubicoOtpRetrieveRequest {
+    /**
+     * A UUID string identifying this Yubico OTP Authenticator Setup Stage.
+     */
+    stageUuid: string;
+}
+
+export interface StagesAuthenticatorYubicoOtpUpdateRequest {
+    /**
+     * A UUID string identifying this Yubico OTP Authenticator Setup Stage.
+     */
+    stageUuid: string;
+    authenticatorYubicoOTPStageRequest: AuthenticatorYubicoOTPStageRequest;
+}
+
+export interface StagesAuthenticatorYubicoOtpUsedByListRequest {
+    /**
+     * A UUID string identifying this Yubico OTP Authenticator Setup Stage.
      */
     stageUuid: string;
 }
@@ -7893,6 +7976,541 @@ export class StagesApi extends runtime.BaseAPI {
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
     ): Promise<Array<UsedBy>> {
         const response = await this.stagesAuthenticatorWebauthnUsedByListRaw(
+            requestParameters,
+            initOverrides,
+        );
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for stagesAuthenticatorYubicoOtpCreate without sending the request
+     */
+    async stagesAuthenticatorYubicoOtpCreateRequestOpts(
+        requestParameters: StagesAuthenticatorYubicoOtpCreateRequest,
+    ): Promise<runtime.RequestOpts> {
+        if (requestParameters["authenticatorYubicoOTPStageRequest"] == null) {
+            throw new runtime.RequiredError(
+                "authenticatorYubicoOTPStageRequest",
+                'Required parameter "authenticatorYubicoOTPStageRequest" was null or undefined when calling stagesAuthenticatorYubicoOtpCreate().',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters["Content-Type"] = "application/json";
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("authentik", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        const urlPath = `/stages/authenticator/yubico_otp/`;
+
+        return {
+            path: urlPath,
+            method: "POST",
+            headers: headerParameters,
+            query: queryParameters,
+            body: AuthenticatorYubicoOTPStageRequestToJSON(
+                requestParameters["authenticatorYubicoOTPStageRequest"],
+            ),
+        };
+    }
+
+    /**
+     * AuthenticatorYubicoOTPStage Viewset
+     */
+    async stagesAuthenticatorYubicoOtpCreateRaw(
+        requestParameters: StagesAuthenticatorYubicoOtpCreateRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<AuthenticatorYubicoOTPStage>> {
+        const requestOptions =
+            await this.stagesAuthenticatorYubicoOtpCreateRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) =>
+            AuthenticatorYubicoOTPStageFromJSON(jsonValue),
+        );
+    }
+
+    /**
+     * AuthenticatorYubicoOTPStage Viewset
+     */
+    async stagesAuthenticatorYubicoOtpCreate(
+        requestParameters: StagesAuthenticatorYubicoOtpCreateRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<AuthenticatorYubicoOTPStage> {
+        const response = await this.stagesAuthenticatorYubicoOtpCreateRaw(
+            requestParameters,
+            initOverrides,
+        );
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for stagesAuthenticatorYubicoOtpDestroy without sending the request
+     */
+    async stagesAuthenticatorYubicoOtpDestroyRequestOpts(
+        requestParameters: StagesAuthenticatorYubicoOtpDestroyRequest,
+    ): Promise<runtime.RequestOpts> {
+        if (requestParameters["stageUuid"] == null) {
+            throw new runtime.RequiredError(
+                "stageUuid",
+                'Required parameter "stageUuid" was null or undefined when calling stagesAuthenticatorYubicoOtpDestroy().',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("authentik", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/stages/authenticator/yubico_otp/{stage_uuid}/`;
+        urlPath = urlPath.replace(
+            "{stage_uuid}",
+            encodeURIComponent(String(requestParameters["stageUuid"])),
+        );
+
+        return {
+            path: urlPath,
+            method: "DELETE",
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * AuthenticatorYubicoOTPStage Viewset
+     */
+    async stagesAuthenticatorYubicoOtpDestroyRaw(
+        requestParameters: StagesAuthenticatorYubicoOtpDestroyRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<void>> {
+        const requestOptions =
+            await this.stagesAuthenticatorYubicoOtpDestroyRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * AuthenticatorYubicoOTPStage Viewset
+     */
+    async stagesAuthenticatorYubicoOtpDestroy(
+        requestParameters: StagesAuthenticatorYubicoOtpDestroyRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<void> {
+        await this.stagesAuthenticatorYubicoOtpDestroyRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Creates request options for stagesAuthenticatorYubicoOtpList without sending the request
+     */
+    async stagesAuthenticatorYubicoOtpListRequestOpts(
+        requestParameters: StagesAuthenticatorYubicoOtpListRequest,
+    ): Promise<runtime.RequestOpts> {
+        const queryParameters: any = {};
+
+        if (requestParameters["apiUrl"] != null) {
+            queryParameters["api_url"] = requestParameters["apiUrl"];
+        }
+
+        if (requestParameters["clientId"] != null) {
+            queryParameters["client_id"] = requestParameters["clientId"];
+        }
+
+        if (requestParameters["configureFlow"] != null) {
+            queryParameters["configure_flow"] = requestParameters["configureFlow"];
+        }
+
+        if (requestParameters["friendlyName"] != null) {
+            queryParameters["friendly_name"] = requestParameters["friendlyName"];
+        }
+
+        if (requestParameters["name"] != null) {
+            queryParameters["name"] = requestParameters["name"];
+        }
+
+        if (requestParameters["ordering"] != null) {
+            queryParameters["ordering"] = requestParameters["ordering"];
+        }
+
+        if (requestParameters["page"] != null) {
+            queryParameters["page"] = requestParameters["page"];
+        }
+
+        if (requestParameters["pageSize"] != null) {
+            queryParameters["page_size"] = requestParameters["pageSize"];
+        }
+
+        if (requestParameters["search"] != null) {
+            queryParameters["search"] = requestParameters["search"];
+        }
+
+        if (requestParameters["secretKey"] != null) {
+            queryParameters["secret_key"] = requestParameters["secretKey"];
+        }
+
+        if (requestParameters["stageUuid"] != null) {
+            queryParameters["stage_uuid"] = requestParameters["stageUuid"];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("authentik", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        const urlPath = `/stages/authenticator/yubico_otp/`;
+
+        return {
+            path: urlPath,
+            method: "GET",
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * AuthenticatorYubicoOTPStage Viewset
+     */
+    async stagesAuthenticatorYubicoOtpListRaw(
+        requestParameters: StagesAuthenticatorYubicoOtpListRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<PaginatedAuthenticatorYubicoOTPStageList>> {
+        const requestOptions =
+            await this.stagesAuthenticatorYubicoOtpListRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) =>
+            PaginatedAuthenticatorYubicoOTPStageListFromJSON(jsonValue),
+        );
+    }
+
+    /**
+     * AuthenticatorYubicoOTPStage Viewset
+     */
+    async stagesAuthenticatorYubicoOtpList(
+        requestParameters: StagesAuthenticatorYubicoOtpListRequest = {},
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<PaginatedAuthenticatorYubicoOTPStageList> {
+        const response = await this.stagesAuthenticatorYubicoOtpListRaw(
+            requestParameters,
+            initOverrides,
+        );
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for stagesAuthenticatorYubicoOtpPartialUpdate without sending the
+     * request
+     */
+    async stagesAuthenticatorYubicoOtpPartialUpdateRequestOpts(
+        requestParameters: StagesAuthenticatorYubicoOtpPartialUpdateRequest,
+    ): Promise<runtime.RequestOpts> {
+        if (requestParameters["stageUuid"] == null) {
+            throw new runtime.RequiredError(
+                "stageUuid",
+                'Required parameter "stageUuid" was null or undefined when calling stagesAuthenticatorYubicoOtpPartialUpdate().',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters["Content-Type"] = "application/json";
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("authentik", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/stages/authenticator/yubico_otp/{stage_uuid}/`;
+        urlPath = urlPath.replace(
+            "{stage_uuid}",
+            encodeURIComponent(String(requestParameters["stageUuid"])),
+        );
+
+        return {
+            path: urlPath,
+            method: "PATCH",
+            headers: headerParameters,
+            query: queryParameters,
+            body: PatchedAuthenticatorYubicoOTPStageRequestToJSON(
+                requestParameters["patchedAuthenticatorYubicoOTPStageRequest"],
+            ),
+        };
+    }
+
+    /**
+     * AuthenticatorYubicoOTPStage Viewset
+     */
+    async stagesAuthenticatorYubicoOtpPartialUpdateRaw(
+        requestParameters: StagesAuthenticatorYubicoOtpPartialUpdateRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<AuthenticatorYubicoOTPStage>> {
+        const requestOptions =
+            await this.stagesAuthenticatorYubicoOtpPartialUpdateRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) =>
+            AuthenticatorYubicoOTPStageFromJSON(jsonValue),
+        );
+    }
+
+    /**
+     * AuthenticatorYubicoOTPStage Viewset
+     */
+    async stagesAuthenticatorYubicoOtpPartialUpdate(
+        requestParameters: StagesAuthenticatorYubicoOtpPartialUpdateRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<AuthenticatorYubicoOTPStage> {
+        const response = await this.stagesAuthenticatorYubicoOtpPartialUpdateRaw(
+            requestParameters,
+            initOverrides,
+        );
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for stagesAuthenticatorYubicoOtpRetrieve without sending the request
+     */
+    async stagesAuthenticatorYubicoOtpRetrieveRequestOpts(
+        requestParameters: StagesAuthenticatorYubicoOtpRetrieveRequest,
+    ): Promise<runtime.RequestOpts> {
+        if (requestParameters["stageUuid"] == null) {
+            throw new runtime.RequiredError(
+                "stageUuid",
+                'Required parameter "stageUuid" was null or undefined when calling stagesAuthenticatorYubicoOtpRetrieve().',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("authentik", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/stages/authenticator/yubico_otp/{stage_uuid}/`;
+        urlPath = urlPath.replace(
+            "{stage_uuid}",
+            encodeURIComponent(String(requestParameters["stageUuid"])),
+        );
+
+        return {
+            path: urlPath,
+            method: "GET",
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * AuthenticatorYubicoOTPStage Viewset
+     */
+    async stagesAuthenticatorYubicoOtpRetrieveRaw(
+        requestParameters: StagesAuthenticatorYubicoOtpRetrieveRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<AuthenticatorYubicoOTPStage>> {
+        const requestOptions =
+            await this.stagesAuthenticatorYubicoOtpRetrieveRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) =>
+            AuthenticatorYubicoOTPStageFromJSON(jsonValue),
+        );
+    }
+
+    /**
+     * AuthenticatorYubicoOTPStage Viewset
+     */
+    async stagesAuthenticatorYubicoOtpRetrieve(
+        requestParameters: StagesAuthenticatorYubicoOtpRetrieveRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<AuthenticatorYubicoOTPStage> {
+        const response = await this.stagesAuthenticatorYubicoOtpRetrieveRaw(
+            requestParameters,
+            initOverrides,
+        );
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for stagesAuthenticatorYubicoOtpUpdate without sending the request
+     */
+    async stagesAuthenticatorYubicoOtpUpdateRequestOpts(
+        requestParameters: StagesAuthenticatorYubicoOtpUpdateRequest,
+    ): Promise<runtime.RequestOpts> {
+        if (requestParameters["stageUuid"] == null) {
+            throw new runtime.RequiredError(
+                "stageUuid",
+                'Required parameter "stageUuid" was null or undefined when calling stagesAuthenticatorYubicoOtpUpdate().',
+            );
+        }
+
+        if (requestParameters["authenticatorYubicoOTPStageRequest"] == null) {
+            throw new runtime.RequiredError(
+                "authenticatorYubicoOTPStageRequest",
+                'Required parameter "authenticatorYubicoOTPStageRequest" was null or undefined when calling stagesAuthenticatorYubicoOtpUpdate().',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters["Content-Type"] = "application/json";
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("authentik", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/stages/authenticator/yubico_otp/{stage_uuid}/`;
+        urlPath = urlPath.replace(
+            "{stage_uuid}",
+            encodeURIComponent(String(requestParameters["stageUuid"])),
+        );
+
+        return {
+            path: urlPath,
+            method: "PUT",
+            headers: headerParameters,
+            query: queryParameters,
+            body: AuthenticatorYubicoOTPStageRequestToJSON(
+                requestParameters["authenticatorYubicoOTPStageRequest"],
+            ),
+        };
+    }
+
+    /**
+     * AuthenticatorYubicoOTPStage Viewset
+     */
+    async stagesAuthenticatorYubicoOtpUpdateRaw(
+        requestParameters: StagesAuthenticatorYubicoOtpUpdateRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<AuthenticatorYubicoOTPStage>> {
+        const requestOptions =
+            await this.stagesAuthenticatorYubicoOtpUpdateRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) =>
+            AuthenticatorYubicoOTPStageFromJSON(jsonValue),
+        );
+    }
+
+    /**
+     * AuthenticatorYubicoOTPStage Viewset
+     */
+    async stagesAuthenticatorYubicoOtpUpdate(
+        requestParameters: StagesAuthenticatorYubicoOtpUpdateRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<AuthenticatorYubicoOTPStage> {
+        const response = await this.stagesAuthenticatorYubicoOtpUpdateRaw(
+            requestParameters,
+            initOverrides,
+        );
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for stagesAuthenticatorYubicoOtpUsedByList without sending the
+     * request
+     */
+    async stagesAuthenticatorYubicoOtpUsedByListRequestOpts(
+        requestParameters: StagesAuthenticatorYubicoOtpUsedByListRequest,
+    ): Promise<runtime.RequestOpts> {
+        if (requestParameters["stageUuid"] == null) {
+            throw new runtime.RequiredError(
+                "stageUuid",
+                'Required parameter "stageUuid" was null or undefined when calling stagesAuthenticatorYubicoOtpUsedByList().',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("authentik", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/stages/authenticator/yubico_otp/{stage_uuid}/used_by/`;
+        urlPath = urlPath.replace(
+            "{stage_uuid}",
+            encodeURIComponent(String(requestParameters["stageUuid"])),
+        );
+
+        return {
+            path: urlPath,
+            method: "GET",
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Get a list of all objects that use this object
+     */
+    async stagesAuthenticatorYubicoOtpUsedByListRaw(
+        requestParameters: StagesAuthenticatorYubicoOtpUsedByListRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<Array<UsedBy>>> {
+        const requestOptions =
+            await this.stagesAuthenticatorYubicoOtpUsedByListRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(UsedByFromJSON));
+    }
+
+    /**
+     * Get a list of all objects that use this object
+     */
+    async stagesAuthenticatorYubicoOtpUsedByList(
+        requestParameters: StagesAuthenticatorYubicoOtpUsedByListRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<Array<UsedBy>> {
+        const response = await this.stagesAuthenticatorYubicoOtpUsedByListRaw(
             requestParameters,
             initOverrides,
         );

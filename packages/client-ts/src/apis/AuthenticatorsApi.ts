@@ -52,6 +52,10 @@ import {
     PaginatedWebAuthnDeviceListFromJSON,
 } from "../models/PaginatedWebAuthnDeviceList.js";
 import {
+    type PaginatedYubicoOTPDeviceList,
+    PaginatedYubicoOTPDeviceListFromJSON,
+} from "../models/PaginatedYubicoOTPDeviceList.js";
+import {
     type PatchedDuoDeviceRequest,
     PatchedDuoDeviceRequestToJSON,
 } from "../models/PatchedDuoDeviceRequest.js";
@@ -79,6 +83,10 @@ import {
     type PatchedWebAuthnDeviceRequest,
     PatchedWebAuthnDeviceRequestToJSON,
 } from "../models/PatchedWebAuthnDeviceRequest.js";
+import {
+    type PatchedYubicoOTPDeviceRequest,
+    PatchedYubicoOTPDeviceRequestToJSON,
+} from "../models/PatchedYubicoOTPDeviceRequest.js";
 import { type SMSDevice, SMSDeviceFromJSON } from "../models/SMSDevice.js";
 import { type SMSDeviceRequest, SMSDeviceRequestToJSON } from "../models/SMSDeviceRequest.js";
 import { type StaticDevice, StaticDeviceFromJSON } from "../models/StaticDevice.js";
@@ -94,6 +102,11 @@ import {
     type WebAuthnDeviceRequest,
     WebAuthnDeviceRequestToJSON,
 } from "../models/WebAuthnDeviceRequest.js";
+import { type YubicoOTPDevice, YubicoOTPDeviceFromJSON } from "../models/YubicoOTPDevice.js";
+import {
+    type YubicoOTPDeviceRequest,
+    YubicoOTPDeviceRequestToJSON,
+} from "../models/YubicoOTPDeviceRequest.js";
 import * as runtime from "../runtime.js";
 
 export interface AuthenticatorsAdminAllListRequest {
@@ -476,6 +489,60 @@ export interface AuthenticatorsAdminWebauthnUpdateRequest {
      */
     id: number;
     webAuthnDeviceRequest: WebAuthnDeviceRequest;
+}
+
+export interface AuthenticatorsAdminYubicoOtpCreateRequest {
+    yubicoOTPDeviceRequest: YubicoOTPDeviceRequest;
+}
+
+export interface AuthenticatorsAdminYubicoOtpDestroyRequest {
+    /**
+     * A unique integer value identifying this Yubico OTP Device.
+     */
+    id: number;
+}
+
+export interface AuthenticatorsAdminYubicoOtpListRequest {
+    name?: string;
+    /**
+     * Which field to use when ordering the results.
+     */
+    ordering?: string;
+    /**
+     * A page number within the paginated result set.
+     */
+    page?: number;
+    /**
+     * Number of results to return per page.
+     */
+    pageSize?: number;
+    /**
+     * A search term.
+     */
+    search?: string;
+}
+
+export interface AuthenticatorsAdminYubicoOtpPartialUpdateRequest {
+    /**
+     * A unique integer value identifying this Yubico OTP Device.
+     */
+    id: number;
+    patchedYubicoOTPDeviceRequest?: PatchedYubicoOTPDeviceRequest;
+}
+
+export interface AuthenticatorsAdminYubicoOtpRetrieveRequest {
+    /**
+     * A unique integer value identifying this Yubico OTP Device.
+     */
+    id: number;
+}
+
+export interface AuthenticatorsAdminYubicoOtpUpdateRequest {
+    /**
+     * A unique integer value identifying this Yubico OTP Device.
+     */
+    id: number;
+    yubicoOTPDeviceRequest: YubicoOTPDeviceRequest;
 }
 
 export interface AuthenticatorsDuoDestroyRequest {
@@ -864,6 +931,63 @@ export interface AuthenticatorsWebauthnUpdateRequest {
 export interface AuthenticatorsWebauthnUsedByListRequest {
     /**
      * A unique integer value identifying this WebAuthn Device.
+     */
+    id: number;
+}
+
+export interface AuthenticatorsYubicoOtpDestroyRequest {
+    /**
+     * A unique integer value identifying this Yubico OTP Device.
+     */
+    id: number;
+}
+
+export interface AuthenticatorsYubicoOtpListRequest {
+    name?: string;
+    /**
+     * Which field to use when ordering the results.
+     */
+    ordering?: string;
+    /**
+     * A page number within the paginated result set.
+     */
+    page?: number;
+    /**
+     * Number of results to return per page.
+     */
+    pageSize?: number;
+    /**
+     * A search term.
+     */
+    search?: string;
+}
+
+export interface AuthenticatorsYubicoOtpPartialUpdateRequest {
+    /**
+     * A unique integer value identifying this Yubico OTP Device.
+     */
+    id: number;
+    patchedYubicoOTPDeviceRequest?: PatchedYubicoOTPDeviceRequest;
+}
+
+export interface AuthenticatorsYubicoOtpRetrieveRequest {
+    /**
+     * A unique integer value identifying this Yubico OTP Device.
+     */
+    id: number;
+}
+
+export interface AuthenticatorsYubicoOtpUpdateRequest {
+    /**
+     * A unique integer value identifying this Yubico OTP Device.
+     */
+    id: number;
+    yubicoOTPDeviceRequest: YubicoOTPDeviceRequest;
+}
+
+export interface AuthenticatorsYubicoOtpUsedByListRequest {
+    /**
+     * A unique integer value identifying this Yubico OTP Device.
      */
     id: number;
 }
@@ -3858,6 +3982,432 @@ export class AuthenticatorsApi extends runtime.BaseAPI {
     }
 
     /**
+     * Creates request options for authenticatorsAdminYubicoOtpCreate without sending the request
+     */
+    async authenticatorsAdminYubicoOtpCreateRequestOpts(
+        requestParameters: AuthenticatorsAdminYubicoOtpCreateRequest,
+    ): Promise<runtime.RequestOpts> {
+        if (requestParameters["yubicoOTPDeviceRequest"] == null) {
+            throw new runtime.RequiredError(
+                "yubicoOTPDeviceRequest",
+                'Required parameter "yubicoOTPDeviceRequest" was null or undefined when calling authenticatorsAdminYubicoOtpCreate().',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters["Content-Type"] = "application/json";
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("authentik", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        const urlPath = `/authenticators/admin/yubico_otp/`;
+
+        return {
+            path: urlPath,
+            method: "POST",
+            headers: headerParameters,
+            query: queryParameters,
+            body: YubicoOTPDeviceRequestToJSON(requestParameters["yubicoOTPDeviceRequest"]),
+        };
+    }
+
+    /**
+     * Viewset for Yubico OTP authenticator devices (for admins)
+     */
+    async authenticatorsAdminYubicoOtpCreateRaw(
+        requestParameters: AuthenticatorsAdminYubicoOtpCreateRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<YubicoOTPDevice>> {
+        const requestOptions =
+            await this.authenticatorsAdminYubicoOtpCreateRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) =>
+            YubicoOTPDeviceFromJSON(jsonValue),
+        );
+    }
+
+    /**
+     * Viewset for Yubico OTP authenticator devices (for admins)
+     */
+    async authenticatorsAdminYubicoOtpCreate(
+        requestParameters: AuthenticatorsAdminYubicoOtpCreateRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<YubicoOTPDevice> {
+        const response = await this.authenticatorsAdminYubicoOtpCreateRaw(
+            requestParameters,
+            initOverrides,
+        );
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for authenticatorsAdminYubicoOtpDestroy without sending the request
+     */
+    async authenticatorsAdminYubicoOtpDestroyRequestOpts(
+        requestParameters: AuthenticatorsAdminYubicoOtpDestroyRequest,
+    ): Promise<runtime.RequestOpts> {
+        if (requestParameters["id"] == null) {
+            throw new runtime.RequiredError(
+                "id",
+                'Required parameter "id" was null or undefined when calling authenticatorsAdminYubicoOtpDestroy().',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("authentik", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/authenticators/admin/yubico_otp/{id}/`;
+        urlPath = urlPath.replace("{id}", encodeURIComponent(String(requestParameters["id"])));
+
+        return {
+            path: urlPath,
+            method: "DELETE",
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Viewset for Yubico OTP authenticator devices (for admins)
+     */
+    async authenticatorsAdminYubicoOtpDestroyRaw(
+        requestParameters: AuthenticatorsAdminYubicoOtpDestroyRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<void>> {
+        const requestOptions =
+            await this.authenticatorsAdminYubicoOtpDestroyRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Viewset for Yubico OTP authenticator devices (for admins)
+     */
+    async authenticatorsAdminYubicoOtpDestroy(
+        requestParameters: AuthenticatorsAdminYubicoOtpDestroyRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<void> {
+        await this.authenticatorsAdminYubicoOtpDestroyRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Creates request options for authenticatorsAdminYubicoOtpList without sending the request
+     */
+    async authenticatorsAdminYubicoOtpListRequestOpts(
+        requestParameters: AuthenticatorsAdminYubicoOtpListRequest,
+    ): Promise<runtime.RequestOpts> {
+        const queryParameters: any = {};
+
+        if (requestParameters["name"] != null) {
+            queryParameters["name"] = requestParameters["name"];
+        }
+
+        if (requestParameters["ordering"] != null) {
+            queryParameters["ordering"] = requestParameters["ordering"];
+        }
+
+        if (requestParameters["page"] != null) {
+            queryParameters["page"] = requestParameters["page"];
+        }
+
+        if (requestParameters["pageSize"] != null) {
+            queryParameters["page_size"] = requestParameters["pageSize"];
+        }
+
+        if (requestParameters["search"] != null) {
+            queryParameters["search"] = requestParameters["search"];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("authentik", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        const urlPath = `/authenticators/admin/yubico_otp/`;
+
+        return {
+            path: urlPath,
+            method: "GET",
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Viewset for Yubico OTP authenticator devices (for admins)
+     */
+    async authenticatorsAdminYubicoOtpListRaw(
+        requestParameters: AuthenticatorsAdminYubicoOtpListRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<PaginatedYubicoOTPDeviceList>> {
+        const requestOptions =
+            await this.authenticatorsAdminYubicoOtpListRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) =>
+            PaginatedYubicoOTPDeviceListFromJSON(jsonValue),
+        );
+    }
+
+    /**
+     * Viewset for Yubico OTP authenticator devices (for admins)
+     */
+    async authenticatorsAdminYubicoOtpList(
+        requestParameters: AuthenticatorsAdminYubicoOtpListRequest = {},
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<PaginatedYubicoOTPDeviceList> {
+        const response = await this.authenticatorsAdminYubicoOtpListRaw(
+            requestParameters,
+            initOverrides,
+        );
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for authenticatorsAdminYubicoOtpPartialUpdate without sending the
+     * request
+     */
+    async authenticatorsAdminYubicoOtpPartialUpdateRequestOpts(
+        requestParameters: AuthenticatorsAdminYubicoOtpPartialUpdateRequest,
+    ): Promise<runtime.RequestOpts> {
+        if (requestParameters["id"] == null) {
+            throw new runtime.RequiredError(
+                "id",
+                'Required parameter "id" was null or undefined when calling authenticatorsAdminYubicoOtpPartialUpdate().',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters["Content-Type"] = "application/json";
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("authentik", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/authenticators/admin/yubico_otp/{id}/`;
+        urlPath = urlPath.replace("{id}", encodeURIComponent(String(requestParameters["id"])));
+
+        return {
+            path: urlPath,
+            method: "PATCH",
+            headers: headerParameters,
+            query: queryParameters,
+            body: PatchedYubicoOTPDeviceRequestToJSON(
+                requestParameters["patchedYubicoOTPDeviceRequest"],
+            ),
+        };
+    }
+
+    /**
+     * Viewset for Yubico OTP authenticator devices (for admins)
+     */
+    async authenticatorsAdminYubicoOtpPartialUpdateRaw(
+        requestParameters: AuthenticatorsAdminYubicoOtpPartialUpdateRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<YubicoOTPDevice>> {
+        const requestOptions =
+            await this.authenticatorsAdminYubicoOtpPartialUpdateRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) =>
+            YubicoOTPDeviceFromJSON(jsonValue),
+        );
+    }
+
+    /**
+     * Viewset for Yubico OTP authenticator devices (for admins)
+     */
+    async authenticatorsAdminYubicoOtpPartialUpdate(
+        requestParameters: AuthenticatorsAdminYubicoOtpPartialUpdateRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<YubicoOTPDevice> {
+        const response = await this.authenticatorsAdminYubicoOtpPartialUpdateRaw(
+            requestParameters,
+            initOverrides,
+        );
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for authenticatorsAdminYubicoOtpRetrieve without sending the request
+     */
+    async authenticatorsAdminYubicoOtpRetrieveRequestOpts(
+        requestParameters: AuthenticatorsAdminYubicoOtpRetrieveRequest,
+    ): Promise<runtime.RequestOpts> {
+        if (requestParameters["id"] == null) {
+            throw new runtime.RequiredError(
+                "id",
+                'Required parameter "id" was null or undefined when calling authenticatorsAdminYubicoOtpRetrieve().',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("authentik", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/authenticators/admin/yubico_otp/{id}/`;
+        urlPath = urlPath.replace("{id}", encodeURIComponent(String(requestParameters["id"])));
+
+        return {
+            path: urlPath,
+            method: "GET",
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Viewset for Yubico OTP authenticator devices (for admins)
+     */
+    async authenticatorsAdminYubicoOtpRetrieveRaw(
+        requestParameters: AuthenticatorsAdminYubicoOtpRetrieveRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<YubicoOTPDevice>> {
+        const requestOptions =
+            await this.authenticatorsAdminYubicoOtpRetrieveRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) =>
+            YubicoOTPDeviceFromJSON(jsonValue),
+        );
+    }
+
+    /**
+     * Viewset for Yubico OTP authenticator devices (for admins)
+     */
+    async authenticatorsAdminYubicoOtpRetrieve(
+        requestParameters: AuthenticatorsAdminYubicoOtpRetrieveRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<YubicoOTPDevice> {
+        const response = await this.authenticatorsAdminYubicoOtpRetrieveRaw(
+            requestParameters,
+            initOverrides,
+        );
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for authenticatorsAdminYubicoOtpUpdate without sending the request
+     */
+    async authenticatorsAdminYubicoOtpUpdateRequestOpts(
+        requestParameters: AuthenticatorsAdminYubicoOtpUpdateRequest,
+    ): Promise<runtime.RequestOpts> {
+        if (requestParameters["id"] == null) {
+            throw new runtime.RequiredError(
+                "id",
+                'Required parameter "id" was null or undefined when calling authenticatorsAdminYubicoOtpUpdate().',
+            );
+        }
+
+        if (requestParameters["yubicoOTPDeviceRequest"] == null) {
+            throw new runtime.RequiredError(
+                "yubicoOTPDeviceRequest",
+                'Required parameter "yubicoOTPDeviceRequest" was null or undefined when calling authenticatorsAdminYubicoOtpUpdate().',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters["Content-Type"] = "application/json";
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("authentik", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/authenticators/admin/yubico_otp/{id}/`;
+        urlPath = urlPath.replace("{id}", encodeURIComponent(String(requestParameters["id"])));
+
+        return {
+            path: urlPath,
+            method: "PUT",
+            headers: headerParameters,
+            query: queryParameters,
+            body: YubicoOTPDeviceRequestToJSON(requestParameters["yubicoOTPDeviceRequest"]),
+        };
+    }
+
+    /**
+     * Viewset for Yubico OTP authenticator devices (for admins)
+     */
+    async authenticatorsAdminYubicoOtpUpdateRaw(
+        requestParameters: AuthenticatorsAdminYubicoOtpUpdateRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<YubicoOTPDevice>> {
+        const requestOptions =
+            await this.authenticatorsAdminYubicoOtpUpdateRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) =>
+            YubicoOTPDeviceFromJSON(jsonValue),
+        );
+    }
+
+    /**
+     * Viewset for Yubico OTP authenticator devices (for admins)
+     */
+    async authenticatorsAdminYubicoOtpUpdate(
+        requestParameters: AuthenticatorsAdminYubicoOtpUpdateRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<YubicoOTPDevice> {
+        const response = await this.authenticatorsAdminYubicoOtpUpdateRaw(
+            requestParameters,
+            initOverrides,
+        );
+        return await response.value();
+    }
+
+    /**
      * Creates request options for authenticatorsAllList without sending the request
      */
     async authenticatorsAllListRequestOpts(): Promise<runtime.RequestOpts> {
@@ -6657,6 +7207,426 @@ export class AuthenticatorsApi extends runtime.BaseAPI {
         initOverrides?: RequestInit | runtime.InitOverrideFunction,
     ): Promise<Array<UsedBy>> {
         const response = await this.authenticatorsWebauthnUsedByListRaw(
+            requestParameters,
+            initOverrides,
+        );
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for authenticatorsYubicoOtpDestroy without sending the request
+     */
+    async authenticatorsYubicoOtpDestroyRequestOpts(
+        requestParameters: AuthenticatorsYubicoOtpDestroyRequest,
+    ): Promise<runtime.RequestOpts> {
+        if (requestParameters["id"] == null) {
+            throw new runtime.RequiredError(
+                "id",
+                'Required parameter "id" was null or undefined when calling authenticatorsYubicoOtpDestroy().',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("authentik", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/authenticators/yubico_otp/{id}/`;
+        urlPath = urlPath.replace("{id}", encodeURIComponent(String(requestParameters["id"])));
+
+        return {
+            path: urlPath,
+            method: "DELETE",
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Viewset for Yubico OTP authenticator devices
+     */
+    async authenticatorsYubicoOtpDestroyRaw(
+        requestParameters: AuthenticatorsYubicoOtpDestroyRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<void>> {
+        const requestOptions =
+            await this.authenticatorsYubicoOtpDestroyRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.VoidApiResponse(response);
+    }
+
+    /**
+     * Viewset for Yubico OTP authenticator devices
+     */
+    async authenticatorsYubicoOtpDestroy(
+        requestParameters: AuthenticatorsYubicoOtpDestroyRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<void> {
+        await this.authenticatorsYubicoOtpDestroyRaw(requestParameters, initOverrides);
+    }
+
+    /**
+     * Creates request options for authenticatorsYubicoOtpList without sending the request
+     */
+    async authenticatorsYubicoOtpListRequestOpts(
+        requestParameters: AuthenticatorsYubicoOtpListRequest,
+    ): Promise<runtime.RequestOpts> {
+        const queryParameters: any = {};
+
+        if (requestParameters["name"] != null) {
+            queryParameters["name"] = requestParameters["name"];
+        }
+
+        if (requestParameters["ordering"] != null) {
+            queryParameters["ordering"] = requestParameters["ordering"];
+        }
+
+        if (requestParameters["page"] != null) {
+            queryParameters["page"] = requestParameters["page"];
+        }
+
+        if (requestParameters["pageSize"] != null) {
+            queryParameters["page_size"] = requestParameters["pageSize"];
+        }
+
+        if (requestParameters["search"] != null) {
+            queryParameters["search"] = requestParameters["search"];
+        }
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("authentik", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        const urlPath = `/authenticators/yubico_otp/`;
+
+        return {
+            path: urlPath,
+            method: "GET",
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Viewset for Yubico OTP authenticator devices
+     */
+    async authenticatorsYubicoOtpListRaw(
+        requestParameters: AuthenticatorsYubicoOtpListRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<PaginatedYubicoOTPDeviceList>> {
+        const requestOptions = await this.authenticatorsYubicoOtpListRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) =>
+            PaginatedYubicoOTPDeviceListFromJSON(jsonValue),
+        );
+    }
+
+    /**
+     * Viewset for Yubico OTP authenticator devices
+     */
+    async authenticatorsYubicoOtpList(
+        requestParameters: AuthenticatorsYubicoOtpListRequest = {},
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<PaginatedYubicoOTPDeviceList> {
+        const response = await this.authenticatorsYubicoOtpListRaw(
+            requestParameters,
+            initOverrides,
+        );
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for authenticatorsYubicoOtpPartialUpdate without sending the request
+     */
+    async authenticatorsYubicoOtpPartialUpdateRequestOpts(
+        requestParameters: AuthenticatorsYubicoOtpPartialUpdateRequest,
+    ): Promise<runtime.RequestOpts> {
+        if (requestParameters["id"] == null) {
+            throw new runtime.RequiredError(
+                "id",
+                'Required parameter "id" was null or undefined when calling authenticatorsYubicoOtpPartialUpdate().',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters["Content-Type"] = "application/json";
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("authentik", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/authenticators/yubico_otp/{id}/`;
+        urlPath = urlPath.replace("{id}", encodeURIComponent(String(requestParameters["id"])));
+
+        return {
+            path: urlPath,
+            method: "PATCH",
+            headers: headerParameters,
+            query: queryParameters,
+            body: PatchedYubicoOTPDeviceRequestToJSON(
+                requestParameters["patchedYubicoOTPDeviceRequest"],
+            ),
+        };
+    }
+
+    /**
+     * Viewset for Yubico OTP authenticator devices
+     */
+    async authenticatorsYubicoOtpPartialUpdateRaw(
+        requestParameters: AuthenticatorsYubicoOtpPartialUpdateRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<YubicoOTPDevice>> {
+        const requestOptions =
+            await this.authenticatorsYubicoOtpPartialUpdateRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) =>
+            YubicoOTPDeviceFromJSON(jsonValue),
+        );
+    }
+
+    /**
+     * Viewset for Yubico OTP authenticator devices
+     */
+    async authenticatorsYubicoOtpPartialUpdate(
+        requestParameters: AuthenticatorsYubicoOtpPartialUpdateRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<YubicoOTPDevice> {
+        const response = await this.authenticatorsYubicoOtpPartialUpdateRaw(
+            requestParameters,
+            initOverrides,
+        );
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for authenticatorsYubicoOtpRetrieve without sending the request
+     */
+    async authenticatorsYubicoOtpRetrieveRequestOpts(
+        requestParameters: AuthenticatorsYubicoOtpRetrieveRequest,
+    ): Promise<runtime.RequestOpts> {
+        if (requestParameters["id"] == null) {
+            throw new runtime.RequiredError(
+                "id",
+                'Required parameter "id" was null or undefined when calling authenticatorsYubicoOtpRetrieve().',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("authentik", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/authenticators/yubico_otp/{id}/`;
+        urlPath = urlPath.replace("{id}", encodeURIComponent(String(requestParameters["id"])));
+
+        return {
+            path: urlPath,
+            method: "GET",
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Viewset for Yubico OTP authenticator devices
+     */
+    async authenticatorsYubicoOtpRetrieveRaw(
+        requestParameters: AuthenticatorsYubicoOtpRetrieveRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<YubicoOTPDevice>> {
+        const requestOptions =
+            await this.authenticatorsYubicoOtpRetrieveRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) =>
+            YubicoOTPDeviceFromJSON(jsonValue),
+        );
+    }
+
+    /**
+     * Viewset for Yubico OTP authenticator devices
+     */
+    async authenticatorsYubicoOtpRetrieve(
+        requestParameters: AuthenticatorsYubicoOtpRetrieveRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<YubicoOTPDevice> {
+        const response = await this.authenticatorsYubicoOtpRetrieveRaw(
+            requestParameters,
+            initOverrides,
+        );
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for authenticatorsYubicoOtpUpdate without sending the request
+     */
+    async authenticatorsYubicoOtpUpdateRequestOpts(
+        requestParameters: AuthenticatorsYubicoOtpUpdateRequest,
+    ): Promise<runtime.RequestOpts> {
+        if (requestParameters["id"] == null) {
+            throw new runtime.RequiredError(
+                "id",
+                'Required parameter "id" was null or undefined when calling authenticatorsYubicoOtpUpdate().',
+            );
+        }
+
+        if (requestParameters["yubicoOTPDeviceRequest"] == null) {
+            throw new runtime.RequiredError(
+                "yubicoOTPDeviceRequest",
+                'Required parameter "yubicoOTPDeviceRequest" was null or undefined when calling authenticatorsYubicoOtpUpdate().',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters["Content-Type"] = "application/json";
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("authentik", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/authenticators/yubico_otp/{id}/`;
+        urlPath = urlPath.replace("{id}", encodeURIComponent(String(requestParameters["id"])));
+
+        return {
+            path: urlPath,
+            method: "PUT",
+            headers: headerParameters,
+            query: queryParameters,
+            body: YubicoOTPDeviceRequestToJSON(requestParameters["yubicoOTPDeviceRequest"]),
+        };
+    }
+
+    /**
+     * Viewset for Yubico OTP authenticator devices
+     */
+    async authenticatorsYubicoOtpUpdateRaw(
+        requestParameters: AuthenticatorsYubicoOtpUpdateRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<YubicoOTPDevice>> {
+        const requestOptions =
+            await this.authenticatorsYubicoOtpUpdateRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) =>
+            YubicoOTPDeviceFromJSON(jsonValue),
+        );
+    }
+
+    /**
+     * Viewset for Yubico OTP authenticator devices
+     */
+    async authenticatorsYubicoOtpUpdate(
+        requestParameters: AuthenticatorsYubicoOtpUpdateRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<YubicoOTPDevice> {
+        const response = await this.authenticatorsYubicoOtpUpdateRaw(
+            requestParameters,
+            initOverrides,
+        );
+        return await response.value();
+    }
+
+    /**
+     * Creates request options for authenticatorsYubicoOtpUsedByList without sending the request
+     */
+    async authenticatorsYubicoOtpUsedByListRequestOpts(
+        requestParameters: AuthenticatorsYubicoOtpUsedByListRequest,
+    ): Promise<runtime.RequestOpts> {
+        if (requestParameters["id"] == null) {
+            throw new runtime.RequiredError(
+                "id",
+                'Required parameter "id" was null or undefined when calling authenticatorsYubicoOtpUsedByList().',
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        if (this.configuration && this.configuration.accessToken) {
+            const token = this.configuration.accessToken;
+            const tokenString = await token("authentik", []);
+
+            if (tokenString) {
+                headerParameters["Authorization"] = `Bearer ${tokenString}`;
+            }
+        }
+
+        let urlPath = `/authenticators/yubico_otp/{id}/used_by/`;
+        urlPath = urlPath.replace("{id}", encodeURIComponent(String(requestParameters["id"])));
+
+        return {
+            path: urlPath,
+            method: "GET",
+            headers: headerParameters,
+            query: queryParameters,
+        };
+    }
+
+    /**
+     * Get a list of all objects that use this object
+     */
+    async authenticatorsYubicoOtpUsedByListRaw(
+        requestParameters: AuthenticatorsYubicoOtpUsedByListRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<runtime.ApiResponse<Array<UsedBy>>> {
+        const requestOptions =
+            await this.authenticatorsYubicoOtpUsedByListRequestOpts(requestParameters);
+        const response = await this.request(requestOptions, initOverrides);
+
+        return new runtime.JSONApiResponse(response, (jsonValue) => jsonValue.map(UsedByFromJSON));
+    }
+
+    /**
+     * Get a list of all objects that use this object
+     */
+    async authenticatorsYubicoOtpUsedByList(
+        requestParameters: AuthenticatorsYubicoOtpUsedByListRequest,
+        initOverrides?: RequestInit | runtime.InitOverrideFunction,
+    ): Promise<Array<UsedBy>> {
+        const response = await this.authenticatorsYubicoOtpUsedByListRaw(
             requestParameters,
             initOverrides,
         );

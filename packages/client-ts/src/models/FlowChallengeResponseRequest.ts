@@ -50,6 +50,11 @@ import {
     AuthenticatorWebAuthnChallengeResponseRequestFromJSONTyped,
     AuthenticatorWebAuthnChallengeResponseRequestToJSON,
 } from "./AuthenticatorWebAuthnChallengeResponseRequest.js";
+import type { AuthenticatorYubicoOTPChallengeResponseRequest } from "./AuthenticatorYubicoOTPChallengeResponseRequest.js";
+import {
+    AuthenticatorYubicoOTPChallengeResponseRequestFromJSONTyped,
+    AuthenticatorYubicoOTPChallengeResponseRequestToJSON,
+} from "./AuthenticatorYubicoOTPChallengeResponseRequest.js";
 import type { AutoSubmitChallengeResponseRequest } from "./AutoSubmitChallengeResponseRequest.js";
 import {
     AutoSubmitChallengeResponseRequestFromJSONTyped,
@@ -166,6 +171,9 @@ export type FlowChallengeResponseRequest =
     | ({
           component: "ak-stage-authenticator-webauthn";
       } & AuthenticatorWebAuthnChallengeResponseRequest)
+    | ({
+          component: "ak-stage-authenticator-yubico-otp";
+      } & AuthenticatorYubicoOTPChallengeResponseRequest)
     | ({ component: "ak-stage-autosubmit" } & AutoSubmitChallengeResponseRequest)
     | ({ component: "ak-stage-captcha" } & CaptchaChallengeResponseRequest)
     | ({ component: "ak-stage-consent" } & ConsentChallengeResponseRequest)
@@ -270,6 +278,12 @@ export function FlowChallengeResponseRequestFromJSONTyped(
                 {},
                 AuthenticatorWebAuthnChallengeResponseRequestFromJSONTyped(json, true),
                 { component: "ak-stage-authenticator-webauthn" } as const,
+            );
+        case "ak-stage-authenticator-yubico-otp":
+            return Object.assign(
+                {},
+                AuthenticatorYubicoOTPChallengeResponseRequestFromJSONTyped(json, true),
+                { component: "ak-stage-authenticator-yubico-otp" } as const,
             );
         case "ak-stage-autosubmit":
             return Object.assign({}, AutoSubmitChallengeResponseRequestFromJSONTyped(json, true), {
@@ -395,6 +409,10 @@ export function FlowChallengeResponseRequestToJSONTyped(
         case "ak-stage-authenticator-webauthn":
             return Object.assign({}, AuthenticatorWebAuthnChallengeResponseRequestToJSON(value), {
                 component: "ak-stage-authenticator-webauthn",
+            } as const);
+        case "ak-stage-authenticator-yubico-otp":
+            return Object.assign({}, AuthenticatorYubicoOTPChallengeResponseRequestToJSON(value), {
+                component: "ak-stage-authenticator-yubico-otp",
             } as const);
         case "ak-stage-autosubmit":
             return Object.assign({}, AutoSubmitChallengeResponseRequestToJSON(value), {

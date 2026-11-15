@@ -4704,6 +4704,86 @@
                     ],
                     "properties": {
                         "model": {
+                            "const": "authentik_stages_authenticator_yubico_otp.authenticatoryubicootpstage"
+                        },
+                        "id": {
+                            "type": "string"
+                        },
+                        "state": {
+                            "type": "string",
+                            "enum": [
+                                "absent",
+                                "created",
+                                "must_created",
+                                "present"
+                            ],
+                            "default": "present"
+                        },
+                        "conditions": {
+                            "type": "array",
+                            "items": {
+                                "type": "boolean"
+                            }
+                        },
+                        "permissions": {
+                            "$ref": "#/definitions/model_authentik_stages_authenticator_yubico_otp.authenticatoryubicootpstage_permissions"
+                        },
+                        "attrs": {
+                            "$ref": "#/definitions/model_authentik_stages_authenticator_yubico_otp.authenticatoryubicootpstage"
+                        },
+                        "identifiers": {
+                            "$ref": "#/definitions/model_authentik_stages_authenticator_yubico_otp.authenticatoryubicootpstage"
+                        }
+                    }
+                },
+                {
+                    "type": "object",
+                    "required": [
+                        "model",
+                        "identifiers"
+                    ],
+                    "properties": {
+                        "model": {
+                            "const": "authentik_stages_authenticator_yubico_otp.yubicootpdevice"
+                        },
+                        "id": {
+                            "type": "string"
+                        },
+                        "state": {
+                            "type": "string",
+                            "enum": [
+                                "absent",
+                                "created",
+                                "must_created",
+                                "present"
+                            ],
+                            "default": "present"
+                        },
+                        "conditions": {
+                            "type": "array",
+                            "items": {
+                                "type": "boolean"
+                            }
+                        },
+                        "permissions": {
+                            "$ref": "#/definitions/model_authentik_stages_authenticator_yubico_otp.yubicootpdevice_permissions"
+                        },
+                        "attrs": {
+                            "$ref": "#/definitions/model_authentik_stages_authenticator_yubico_otp.yubicootpdevice"
+                        },
+                        "identifiers": {
+                            "$ref": "#/definitions/model_authentik_stages_authenticator_yubico_otp.yubicootpdevice"
+                        }
+                    }
+                },
+                {
+                    "type": "object",
+                    "required": [
+                        "model",
+                        "identifiers"
+                    ],
+                    "properties": {
+                        "model": {
                             "const": "authentik_stages_captcha.captchastage"
                         },
                         "id": {
@@ -9487,6 +9567,7 @@
                         "authentik.stages.authenticator_totp",
                         "authentik.stages.authenticator_validate",
                         "authentik.stages.authenticator_webauthn",
+                        "authentik.stages.authenticator_yubico_otp",
                         "authentik.stages.captcha",
                         "authentik.stages.consent",
                         "authentik.stages.deny",
@@ -9625,6 +9706,8 @@
                         "authentik_stages_authenticator_validate.authenticatorvalidatestage",
                         "authentik_stages_authenticator_webauthn.authenticatorwebauthnstage",
                         "authentik_stages_authenticator_webauthn.webauthndevice",
+                        "authentik_stages_authenticator_yubico_otp.authenticatoryubicootpstage",
+                        "authentik_stages_authenticator_yubico_otp.yubicootpdevice",
                         "authentik_stages_captcha.captchastage",
                         "authentik_stages_consent.consentstage",
                         "authentik_stages_deny.denystage",
@@ -14777,7 +14860,8 @@
                             "webauthn",
                             "duo",
                             "sms",
-                            "email"
+                            "email",
+                            "yubicootp"
                         ],
                         "title": "Device classes"
                     },
@@ -15007,6 +15091,110 @@
                             "change_webauthndevice",
                             "delete_webauthndevice",
                             "view_webauthndevice"
+                        ]
+                    },
+                    "user": {
+                        "type": "integer"
+                    },
+                    "role": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "model_authentik_stages_authenticator_yubico_otp.authenticatoryubicootpstage": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "title": "Name"
+                },
+                "configure_flow": {
+                    "type": "string",
+                    "format": "uuid",
+                    "title": "Configure flow",
+                    "description": "Flow used by an authenticated user to configure this Stage. If empty, user will not be able to configure this stage."
+                },
+                "friendly_name": {
+                    "type": "string",
+                    "title": "Friendly name"
+                },
+                "api_url": {
+                    "type": "string",
+                    "minLength": 1,
+                    "title": "Api url",
+                    "description": "Validation server that verifies OTPs, YubiCloud by default."
+                },
+                "client_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "title": "Client id",
+                    "description": "Client ID for the validation server."
+                },
+                "secret_key": {
+                    "type": "string",
+                    "minLength": 1,
+                    "title": "Secret key",
+                    "description": "Secret key for the validation server."
+                }
+            },
+            "required": []
+        },
+        "model_authentik_stages_authenticator_yubico_otp.authenticatoryubicootpstage_permissions": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [
+                    "permission"
+                ],
+                "properties": {
+                    "permission": {
+                        "type": "string",
+                        "enum": [
+                            "add_authenticatoryubicootpstage",
+                            "change_authenticatoryubicootpstage",
+                            "delete_authenticatoryubicootpstage",
+                            "view_authenticatoryubicootpstage"
+                        ]
+                    },
+                    "user": {
+                        "type": "integer"
+                    },
+                    "role": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "model_authentik_stages_authenticator_yubico_otp.yubicootpdevice": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "maxLength": 64,
+                    "minLength": 1,
+                    "title": "Name",
+                    "description": "The human-readable name of this device."
+                }
+            },
+            "required": []
+        },
+        "model_authentik_stages_authenticator_yubico_otp.yubicootpdevice_permissions": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "required": [
+                    "permission"
+                ],
+                "properties": {
+                    "permission": {
+                        "type": "string",
+                        "enum": [
+                            "add_yubicootpdevice",
+                            "change_yubicootpdevice",
+                            "delete_yubicootpdevice",
+                            "view_yubicootpdevice"
                         ]
                     },
                     "user": {

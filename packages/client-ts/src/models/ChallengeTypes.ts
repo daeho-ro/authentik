@@ -55,6 +55,11 @@ import {
     AuthenticatorWebAuthnChallengeFromJSONTyped,
     AuthenticatorWebAuthnChallengeToJSON,
 } from "./AuthenticatorWebAuthnChallenge.js";
+import type { AuthenticatorYubicoOTPChallenge } from "./AuthenticatorYubicoOTPChallenge.js";
+import {
+    AuthenticatorYubicoOTPChallengeFromJSONTyped,
+    AuthenticatorYubicoOTPChallengeToJSON,
+} from "./AuthenticatorYubicoOTPChallenge.js";
 import type { AutosubmitChallenge } from "./AutosubmitChallenge.js";
 import {
     AutosubmitChallengeFromJSONTyped,
@@ -148,6 +153,7 @@ export type ChallengeTypes =
     | ({ component: "ak-stage-authenticator-totp" } & AuthenticatorTOTPChallenge)
     | ({ component: "ak-stage-authenticator-validate" } & AuthenticatorValidationChallenge)
     | ({ component: "ak-stage-authenticator-webauthn" } & AuthenticatorWebAuthnChallenge)
+    | ({ component: "ak-stage-authenticator-yubico-otp" } & AuthenticatorYubicoOTPChallenge)
     | ({ component: "ak-stage-autosubmit" } & AutosubmitChallenge)
     | ({ component: "ak-stage-captcha" } & CaptchaChallenge)
     | ({ component: "ak-stage-consent" } & ConsentChallenge)
@@ -235,6 +241,10 @@ export function ChallengeTypesFromJSONTyped(
         case "ak-stage-authenticator-webauthn":
             return Object.assign({}, AuthenticatorWebAuthnChallengeFromJSONTyped(json, true), {
                 component: "ak-stage-authenticator-webauthn",
+            } as const);
+        case "ak-stage-authenticator-yubico-otp":
+            return Object.assign({}, AuthenticatorYubicoOTPChallengeFromJSONTyped(json, true), {
+                component: "ak-stage-authenticator-yubico-otp",
             } as const);
         case "ak-stage-autosubmit":
             return Object.assign({}, AutosubmitChallengeFromJSONTyped(json, true), {
@@ -372,6 +382,10 @@ export function ChallengeTypesToJSONTyped(
         case "ak-stage-authenticator-webauthn":
             return Object.assign({}, AuthenticatorWebAuthnChallengeToJSON(value), {
                 component: "ak-stage-authenticator-webauthn",
+            } as const);
+        case "ak-stage-authenticator-yubico-otp":
+            return Object.assign({}, AuthenticatorYubicoOTPChallengeToJSON(value), {
+                component: "ak-stage-authenticator-yubico-otp",
             } as const);
         case "ak-stage-autosubmit":
             return Object.assign({}, AutosubmitChallengeToJSON(value), {

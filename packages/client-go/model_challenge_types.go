@@ -27,6 +27,7 @@ type ChallengeTypes struct {
 	AuthenticatorTOTPChallenge       *AuthenticatorTOTPChallenge
 	AuthenticatorValidationChallenge *AuthenticatorValidationChallenge
 	AuthenticatorWebAuthnChallenge   *AuthenticatorWebAuthnChallenge
+	AuthenticatorYubicoOTPChallenge  *AuthenticatorYubicoOTPChallenge
 	AutosubmitChallenge              *AutosubmitChallenge
 	CaptchaChallenge                 *CaptchaChallenge
 	ConsentChallenge                 *ConsentChallenge
@@ -110,6 +111,13 @@ func AuthenticatorValidationChallengeAsChallengeTypes(v *AuthenticatorValidation
 func AuthenticatorWebAuthnChallengeAsChallengeTypes(v *AuthenticatorWebAuthnChallenge) ChallengeTypes {
 	return ChallengeTypes{
 		AuthenticatorWebAuthnChallenge: v,
+	}
+}
+
+// AuthenticatorYubicoOTPChallengeAsChallengeTypes is a convenience function that returns AuthenticatorYubicoOTPChallenge wrapped in ChallengeTypes
+func AuthenticatorYubicoOTPChallengeAsChallengeTypes(v *AuthenticatorYubicoOTPChallenge) ChallengeTypes {
+	return ChallengeTypes{
+		AuthenticatorYubicoOTPChallenge: v,
 	}
 }
 
@@ -450,6 +458,18 @@ func (dst *ChallengeTypes) UnmarshalJSON(data []byte) error {
 		}
 	}
 
+	// check if the discriminator value is 'ak-stage-authenticator-yubico-otp'
+	if jsonDict["component"] == "ak-stage-authenticator-yubico-otp" {
+		// try to unmarshal JSON data into AuthenticatorYubicoOTPChallenge
+		err = json.Unmarshal(data, &dst.AuthenticatorYubicoOTPChallenge)
+		if err == nil {
+			return nil // data stored in dst.AuthenticatorYubicoOTPChallenge, return on the first match
+		} else {
+			dst.AuthenticatorYubicoOTPChallenge = nil
+			return fmt.Errorf("failed to unmarshal ChallengeTypes as AuthenticatorYubicoOTPChallenge: %s", err.Error())
+		}
+	}
+
 	// check if the discriminator value is 'ak-stage-autosubmit'
 	if jsonDict["component"] == "ak-stage-autosubmit" {
 		// try to unmarshal JSON data into AutosubmitChallenge
@@ -671,6 +691,10 @@ func (src ChallengeTypes) MarshalJSON() ([]byte, error) {
 		return json.Marshal(&src.AuthenticatorWebAuthnChallenge)
 	}
 
+	if src.AuthenticatorYubicoOTPChallenge != nil {
+		return json.Marshal(&src.AuthenticatorYubicoOTPChallenge)
+	}
+
 	if src.AutosubmitChallenge != nil {
 		return json.Marshal(&src.AutosubmitChallenge)
 	}
@@ -799,6 +823,10 @@ func (obj *ChallengeTypes) GetActualInstance() interface{} {
 		return obj.AuthenticatorWebAuthnChallenge
 	}
 
+	if obj.AuthenticatorYubicoOTPChallenge != nil {
+		return obj.AuthenticatorYubicoOTPChallenge
+	}
+
 	if obj.AutosubmitChallenge != nil {
 		return obj.AutosubmitChallenge
 	}
@@ -923,6 +951,10 @@ func (obj ChallengeTypes) GetActualInstanceValue() interface{} {
 
 	if obj.AuthenticatorWebAuthnChallenge != nil {
 		return *obj.AuthenticatorWebAuthnChallenge
+	}
+
+	if obj.AuthenticatorYubicoOTPChallenge != nil {
+		return *obj.AuthenticatorYubicoOTPChallenge
 	}
 
 	if obj.AutosubmitChallenge != nil {
