@@ -119,6 +119,7 @@ INSTALLED_APPS = [
     "authentik.stages.authenticator_totp",
     "authentik.stages.authenticator_validate",
     "authentik.stages.authenticator_webauthn",
+    "authentik.stages.authenticator_yubico_otp",
     "authentik.stages.captcha",
     "authentik.stages.consent",
     "authentik.stages.deny",

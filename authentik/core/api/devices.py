@@ -19,6 +19,7 @@ from authentik.core.api.utils import MetaNameSerializer
 from authentik.stages.authenticator import device_classes, devices_for_user
 from authentik.stages.authenticator.models import Device
 from authentik.stages.authenticator_webauthn.models import WebAuthnDevice
+from authentik.stages.authenticator_yubico_otp.models import YubicoOTPDevice
 
 try:
     from authentik.enterprise.stages.authenticator_endpoint_gdtc.models import EndpointDevice
@@ -57,6 +58,8 @@ class DeviceSerializer(MetaNameSerializer):
             return instance.device_type.aaguid if instance.device_type else None
         if EndpointDevice and isinstance(instance, EndpointDevice):
             return instance.data.get("deviceSignals", {}).get("deviceModel")
+        if isinstance(instance, YubicoOTPDevice):
+            return instance.public_id
         return None
 
 

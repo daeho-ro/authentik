@@ -148,19 +148,27 @@ def select_challenge_email(request: HttpRequest, device: EmailDevice):
     device.stage.send(device)
 
 
+# Code-based classes whose single challenge covers all of the user's devices of that class
+CLASS_WIDE_CODE_DEVICE_CLASSES = (
+    DeviceClasses.TOTP,
+    DeviceClasses.STATIC,
+    DeviceClasses.YUBICOOTP,
+)
+
+
 def validate_challenge_code(
     code: str, stage_view: StageView, user: User, challenges: list[dict]
 ) -> Device:
     """Validate code-based challenges against eligible devices.
 
-    TOTP and static challenges represent all of the user's devices of that class,
+    TOTP, static and Yubico OTP challenges represent all of the user's devices of that class,
     while email and SMS challenges are bound to a specific device.
     """
     stage = stage_view.executor.current_stage
     class_wide_challenges = {
         challenge["device_class"]
         for challenge in challenges
-        if challenge["device_class"] in (DeviceClasses.TOTP, DeviceClasses.STATIC)
+        if challenge["device_class"] in CLASS_WIDE_CODE_DEVICE_CLASSES
     }
     device_specific_challenges = {
         (challenge["device_class"], challenge["device_uid"])
@@ -176,7 +184,7 @@ def validate_challenge_code(
             device_class = DeviceClasses.from_model_label(device.model_label())
             if device_class not in stage.device_classes:
                 continue
-            if device_class in (DeviceClasses.TOTP, DeviceClasses.STATIC):
+            if device_class in CLASS_WIDE_CODE_DEVICE_CLASSES:
                 # One challenge covers all enrolled devices of this class.
                 if device_class not in class_wide_challenges:
                     continue

@@ -88,7 +88,13 @@ class AuthenticatorValidationChallengeResponse(ChallengeResponse):
     def validate_code(self, code: str) -> str:
         """Validate code-based response, raise error if code isn't allowed"""
         self._challenge_allowed(
-            [DeviceClasses.TOTP, DeviceClasses.STATIC, DeviceClasses.SMS, DeviceClasses.EMAIL]
+            [
+                DeviceClasses.TOTP,
+                DeviceClasses.STATIC,
+                DeviceClasses.SMS,
+                DeviceClasses.EMAIL,
+                DeviceClasses.YUBICOOTP,
+            ]
         )
         challenges = self.stage.executor.plan.context.get(PLAN_CONTEXT_DEVICE_CHALLENGES, [])
         self.device = validate_challenge_code(

@@ -22,6 +22,7 @@ class DeviceClasses(models.TextChoices):
     DUO = "duo", _("Duo")
     SMS = "sms", _("SMS")
     EMAIL = "email", _("Email")
+    YUBICOOTP = "yubicootp", _("Yubico OTP")
 
     @staticmethod
     def from_model_label(model_label: str) -> DeviceClasses:
@@ -39,6 +40,7 @@ def default_device_classes() -> list:
         DeviceClasses.DUO,
         DeviceClasses.SMS,
         DeviceClasses.EMAIL,
+        DeviceClasses.YUBICOOTP,
     ]
 
 
