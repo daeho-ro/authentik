@@ -9,6 +9,7 @@ import "#admin/stages/authenticator_static/AuthenticatorStaticStageForm";
 import "#admin/stages/authenticator_totp/AuthenticatorTOTPStageForm";
 import "#admin/stages/authenticator_validate/AuthenticatorValidateStageForm";
 import "#admin/stages/authenticator_webauthn/AuthenticatorWebAuthnStageForm";
+import "#admin/stages/authenticator_yubico_otp/AuthenticatorYubicoOTPStageForm";
 import "#admin/stages/captcha/CaptchaStageForm";
 import "#admin/stages/consent/ConsentStageForm";
 import "#admin/stages/deny/DenyStageForm";

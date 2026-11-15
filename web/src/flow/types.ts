@@ -11,6 +11,7 @@ import type {
     AuthenticatorStaticChallenge,
     AuthenticatorTOTPChallenge,
     AuthenticatorWebAuthnChallenge,
+    AuthenticatorYubicoOTPChallenge,
     CaptchaChallenge,
     ChallengeTypes,
     ConsentChallenge,
@@ -47,6 +48,7 @@ export type FormStaticChallenge =
     | AuthenticatorStaticChallenge
     | AuthenticatorTOTPChallenge
     | AuthenticatorWebAuthnChallenge
+    | AuthenticatorYubicoOTPChallenge
     | CaptchaChallenge
     | ConsentChallenge
     | PasswordChallenge

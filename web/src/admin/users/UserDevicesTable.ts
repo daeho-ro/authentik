@@ -59,6 +59,8 @@ export class UserDeviceTable extends Table<Device> {
                 return api.authenticatorsAdminStaticDestroy({ id: parseInt(device.pk, 10) });
             case "authentik_stages_authenticator_webauthn.WebAuthnDevice":
                 return api.authenticatorsAdminWebauthnDestroy({ id: parseInt(device.pk, 10) });
+            case "authentik_stages_authenticator_yubico_otp.YubicoOTPDevice":
+                return api.authenticatorsAdminYubicoOtpDestroy({ id: parseInt(device.pk, 10) });
             default:
                 throw new SentryIgnoredError(
                     msg(str`Device type ${device.verboseName} cannot be deleted`),

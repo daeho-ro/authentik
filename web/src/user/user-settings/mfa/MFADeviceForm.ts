@@ -66,6 +66,12 @@ export class MFADeviceForm extends ModelForm<Device, string> {
                     webAuthnDeviceRequest: device,
                 });
                 break;
+            case "authentik_stages_authenticator_yubico_otp.YubicoOTPDevice":
+                await aki(AuthenticatorsApi).authenticatorsYubicoOtpUpdate({
+                    id: parseInt(this.instance?.pk, 10),
+                    yubicoOTPDeviceRequest: device,
+                });
+                break;
             default:
                 throw new SentryIgnoredError(
                     msg(str`Device type ${device.verboseName} cannot be edited`),

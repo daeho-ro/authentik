@@ -75,6 +75,13 @@ const createDevicePickerPropMap = () =>
             label: msg("Email"),
             description: msg("Tokens sent via email."),
         },
+        [DeviceClassesEnum.Yubicootp]: {
+            icon: "fa-usb",
+            label: msg("YubiKey OTP", { id: "yubico-otp.device-picker.label" }),
+            description: msg("Touch your YubiKey to enter a one-time password.", {
+                id: "yubico-otp.device-picker.description",
+            }),
+        },
         [DeviceClassesEnum.UnknownDefaultOpenApi]: {
             icon: "fa-question",
             label: msg("Unknown device"),
@@ -90,6 +97,7 @@ export function resolveAuthenticatorComponentTag(
         case DeviceClassesEnum.Totp:
         case DeviceClassesEnum.Email:
         case DeviceClassesEnum.Sms:
+        case DeviceClassesEnum.Yubicootp:
             return "ak-stage-authenticator-validate-code";
         case DeviceClassesEnum.Webauthn:
             return "ak-stage-authenticator-validate-webauthn";

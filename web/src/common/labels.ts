@@ -143,6 +143,10 @@ export function formatDeviceChallengeMessage(deviceChallenge?: DeviceChallenge |
             return msg("Open your authenticator app to retrieve a one-time use code.");
         case DeviceClassesEnum.Static:
             return msg("Enter a one-time recovery code for this user.");
+        case DeviceClassesEnum.Yubicootp:
+            return msg("Insert your YubiKey and touch it to enter a one-time password.", {
+                id: "yubico-otp.setup.description",
+            });
     }
 
     return msg("Enter the code from your authenticator device.");

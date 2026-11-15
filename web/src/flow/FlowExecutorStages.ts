@@ -112,6 +112,10 @@ export const StageEntries: readonly StageEntry[] = [
         fetch: () => import("#flow/stages/authenticator_totp/AuthenticatorTOTPStage"),
     },
     {
+        stage: "ak-stage-authenticator-yubico-otp",
+        fetch: () => import("#flow/stages/authenticator_yubico_otp/AuthenticatorYubicoOTPStage"),
+    },
+    {
         stage: "ak-stage-authenticator-validate",
         fetch: () => import("#flow/stages/authenticator_validate/AuthenticatorValidateStage"),
     },

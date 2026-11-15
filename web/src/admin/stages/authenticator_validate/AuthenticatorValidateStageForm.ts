@@ -99,6 +99,10 @@ export class AuthenticatorValidateStageForm extends BaseStageForm<AuthenticatorV
             [DeviceClassesEnum.Duo, msg("Duo Authenticators")],
             [DeviceClassesEnum.Sms, msg("SMS-based Authenticators")],
             [DeviceClassesEnum.Email, msg("Email-based Authenticators")],
+            [
+                DeviceClassesEnum.Yubicootp,
+                msg("Yubico OTP Authenticators", { id: "yubico-otp.device-class.label" }),
+            ],
         ];
 
         return html`

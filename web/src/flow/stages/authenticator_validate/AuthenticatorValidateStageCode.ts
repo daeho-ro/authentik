@@ -16,6 +16,7 @@ import {
 import { msg } from "@lit/localize";
 import { html, LitElement, TemplateResult } from "lit";
 import { customElement } from "lit/decorators.js";
+import { ifDefined } from "lit/directives/if-defined.js";
 
 @customElement("ak-stage-authenticator-validate-code")
 export class AuthenticatorValidateStageWebCode extends BaseDeviceStage<
@@ -26,6 +27,9 @@ export class AuthenticatorValidateStageWebCode extends BaseDeviceStage<
 
     render(): TemplateResult {
         const staticDevice = this.deviceChallenge?.deviceClass === DeviceClassesEnum.Static;
+        // A YubiKey types its OTP like a keyboard, so the input takes any text and is never
+        // filled from a password manager.
+        const yubicoOTP = this.deviceChallenge?.deviceClass === DeviceClassesEnum.Yubicootp;
 
         return html`<form class="pf-c-form" @submit=${this.submitForm}>
             ${this.renderUserInfo()}
@@ -36,7 +40,11 @@ export class AuthenticatorValidateStageWebCode extends BaseDeviceStage<
                         required: true,
                         htmlFor: "validation-code-input",
                     },
-                    staticDevice ? msg("Static token") : msg("Authentication code"),
+                    staticDevice
+                        ? msg("Static token")
+                        : yubicoOTP
+                          ? msg("YubiKey OTP", { id: "yubico-otp.validate.code.label" })
+                          : msg("Authentication code"),
                 )}
                 <input
                     ${this.primaryFocusTarget.toRef()}
@@ -44,14 +52,22 @@ export class AuthenticatorValidateStageWebCode extends BaseDeviceStage<
                     aria-describedby="validation-code-help"
                     type="text"
                     name="code"
-                    inputmode=${staticDevice ? "text" : "numeric"}
-                    pattern=${staticDevice ? "[0-9a-zA-Z\\-\\s]*" : "[0-9]*"}
-                    placeholder=${msg("Type an authentication code...")}
+                    inputmode=${staticDevice || yubicoOTP ? "text" : "numeric"}
+                    pattern=${ifDefined(
+                        yubicoOTP ? undefined : staticDevice ? "[0-9a-zA-Z\\-\\s]*" : "[0-9]*",
+                    )}
+                    placeholder=${
+                        yubicoOTP
+                            ? msg("Touch your YubiKey...", {
+                                  id: "yubico-otp.validate.code.placeholder",
+                              })
+                            : msg("Type an authentication code...")
+                    }
                     autofocus
                     spellcheck="false"
-                    autocomplete="one-time-code"
+                    autocomplete=${yubicoOTP ? "off" : "one-time-code"}
                     class="pf-c-form-control pf-m-monospace"
-                    value="${PasswordManagerPrefill.totp || ""}"
+                    value="${yubicoOTP ? "" : PasswordManagerPrefill.totp || ""}"
                     required
                 />
                 <div class="pf-c-form__helper-text" id="validation-code-help">
