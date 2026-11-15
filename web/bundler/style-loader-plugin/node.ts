@@ -147,15 +147,13 @@ export function styleLoaderPlugin({
              * Bundle the CSS and return as text...
              */
             build.onLoad({ filter: /.*/, namespace: CSSNamespace.Bundled }, async (args) => {
-                const cssContent = await readFile(args.path, "utf8");
                 let context = disposables.get(args.path);
 
                 const buildOptions: BuildOptions = {
-                    stdin: {
-                        contents: cssContent,
-                        resolveDir: dirname(args.path),
-                        loader: "css",
-                    },
+                    // An entry point rather than `stdin`, so that a watch context reads
+                    // the file again on each rebuild and lists it in the metafile inputs.
+                    entryPoints: [args.path],
+                    absWorkingDir,
                     metafile: true,
                     bundle: true,
                     write: false,
@@ -212,8 +210,7 @@ export function styleLoaderPlugin({
 
                 const bundledCSS = result.outputFiles?.[0].text;
                 const { inputs = {} } = result.metafile || {};
-                const relativePaths = Object.keys(inputs).filter((path) => path !== "<stdin>");
-                const watchFiles = relativePaths.map((path) => join(absWorkingDir, path));
+                const watchFiles = Object.keys(inputs).map((path) => join(absWorkingDir, path));
 
                 return {
                     contents: bundledCSS,
