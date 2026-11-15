@@ -40,7 +40,8 @@ func (fe *FlowExecutor) solveChallenge_AuthenticatorValidate(challenge *api.Chal
 			inner.Duo = &devId32
 		}
 		if devCh.DeviceClass == api.DEVICECLASSESENUM_STATIC ||
-			devCh.DeviceClass == api.DEVICECLASSESENUM_TOTP {
+			devCh.DeviceClass == api.DEVICECLASSESENUM_TOTP ||
+			devCh.DeviceClass == api.DEVICECLASSESENUM_YUBICOOTP {
 			// Only use code-based devices if we have a code in the entered password,
 			// and we haven't selected a push device yet
 			if deviceChallenge == nil && fe.getAnswer(StageAuthenticatorValidate) != "" {

@@ -29,7 +29,7 @@ func (fe *FlowExecutor) SetSecrets(password string, mfaCodeBased bool) {
 	}
 	idx := strings.LastIndex(password, CodePasswordSeparator)
 	authenticator := password[idx+1:]
-	// Authenticator is either 6 / 8 digits (TOTP) or any length (static code)
+	// Authenticator is either 6 / 8 digits (TOTP), a Yubico OTP or any length (static code)
 	// and as a result we can't really validate whether what we've
 	// extracted is a valid recovery code.
 	fe.Answers[StagePassword] = password[:idx]
